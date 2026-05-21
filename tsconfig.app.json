@@ -19,7 +19,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/shared/components/*"],
+      "@hooks/*": ["./src/shared/hooks/*"],
+      "@features/*": ["./src/features/*"],
+      "@ui/*": ["./src/shared/ui/*"]
+    }
   },
   "include": ["src"]
 }
