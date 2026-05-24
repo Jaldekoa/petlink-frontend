@@ -259,7 +259,7 @@
 /* Tailwind themes and utilities */
 
 @theme {
---color-surface-bright: #f8faf8;
+  --color-surface-bright: #f8faf8;
   --color-surface: #f8faf8;
   --color-surface-dim: #d8dad9;
   --color-surface-container-lowest: #ffffff;
@@ -309,6 +309,21 @@
 
   --font-jakarta: 'Plus Jakarta Sans', sans-serif;
   --font-vietnam: 'Be Vietnam Pro', sans-serif;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --radius: 0.5rem;
+
+  --spacing-base: 8px;
+  --spacing-margin-mobile: 20px;
+  --spacing-gutter-mobile: 16px;
+  --spacing-stack-sm: 12px;
+  --spacing-stack-md: 24px;
+  --spacing-stack-lg: 40px;
 }
 
 @utility headline-xl {
