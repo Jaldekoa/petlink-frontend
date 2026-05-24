@@ -2,9 +2,9 @@ function Home() {
 
   return (
     <>
-    <h1>
+      <h1 className="headline-xl text-primary-container">
         Petlink
-    </h1>
+      </h1>
     </>
   )
 }
