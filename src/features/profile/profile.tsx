@@ -1,4 +1,4 @@
-import MenuNavigationGrid from "./components/MenuNavigationgrid";
+import MenuNavigationGrid from "./components/MenuNavigationGrid";
 import ProfileHeader from "./components/ProfileHeader";
 
 export default function Profile() {
