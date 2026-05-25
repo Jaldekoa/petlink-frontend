@@ -5,6 +5,7 @@ import Animals from "@features/animals/animals";
 import Search from "@features/search/search";
 import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
+import MainLayout from "@shared/layout/Layout";
 
 export async function mainLoader() {
   const isAuthenticated = await authUser();
@@ -19,25 +20,30 @@ export async function mainLoader() {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <MainLayout />,
+    children: [{ index: true, element: <Home /> }]
   },
   {
     path: "/animals",
-    element: <Animals />,
+    element: <MainLayout />,
+    children: [{ index: true, element: <Animals /> }],
     loader: mainLoader,
   },
   {
     path: "/search",
-    element: <Search />,
+    element: <MainLayout />,
+    children: [{ index: true, element: <Search /> }],
   },
   {
     path: "/chat",
-    element: <Chat />,
+    element: <MainLayout />,
+    children: [{ index: true, element: <Chat /> }],
     loader: mainLoader,
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <MainLayout />,
+    children: [{ index: true, element: <Profile /> }],
     loader: mainLoader,
   },
 ]);
