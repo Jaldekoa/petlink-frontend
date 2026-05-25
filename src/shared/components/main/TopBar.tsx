@@ -1,6 +1,6 @@
 export default function TopBar({ imgSrc }: { imgSrc: string }) {
     return (
-        <header className="fixed top-0 left-0 w-full z-50 bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-md shadow-sm">
+        <header className="fixed top-0 left-0 w-full z-50 bg-surface/90  backdrop-blur-md shadow-sm">
             <div className="flex justify-between items-center px-margin-mobile py-base h-16 w-full max-w-7xl mx-auto">
                 <button
                     className="material-symbols-outlined p-2 text-primary hover:bg-surface-container-high rounded-full transition-colors active:scale-90 duration-200">
