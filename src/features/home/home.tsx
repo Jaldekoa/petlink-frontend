@@ -1,12 +1,11 @@
-function Home() {
+import Main from "@components/main/Main";
 
+function Home() {
   return (
     <>
-    <h1>
-        Petlink
-    </h1>
+      <Main />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
