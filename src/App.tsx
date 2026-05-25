@@ -1,12 +1,13 @@
-import Home from "@/features/home/home";
+import Main from "@/shared/components/main/Main";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <Home/>
+      <Main/>
     </>
   );
 }
 
 export default App;
+
