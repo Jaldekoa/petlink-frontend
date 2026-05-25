@@ -4,7 +4,7 @@ interface HeaderProps {
 
 export default function Header({ notificationCount = 5 }: HeaderProps) {
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-sm">
+    <header className="top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-sm">
       <div className="flex items-center px-margin-mobile py-base h-16 w-full max-w-7xl mx-auto">
 
         {/* Logo izquierda */}

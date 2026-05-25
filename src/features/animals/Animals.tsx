@@ -1,206 +1,145 @@
+// Animals.tsx
 import { useState } from "react";
-import { MapPin, Heart } from "lucide-react";
-import type { Animal, AnimalTab } from "@/shared/types/animal.types.ts";
+import AnimalGrid, { type AnimalGridItem } from "../../shared/components/main/AnimalGrid";
 
-// ─── Mock data ────────────────────────────────────────────────────────────────
+type AnimalTab = "apadrinados" | "adoptados" | "favoritos";
 
-const MOCK_ANIMALS: Record<AnimalTab, Animal[]> = {
+const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   apadrinados: [
-    { id: "1", name: "Mochi", species: "Perro", age: "2 años", location: "Madrid", imageUrl: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80", badge: "Apadrinado" },
-    { id: "2", name: "Luna", species: "Gato", age: "1 año", location: "Barcelona", imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80", badge: "Apadrinado" },
-    { id: "3", name: "Kira", species: "Perra", age: "3 años", location: "Valencia", imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80", badge: "Apadrinado" },
-    { id: "4", name: "Max", species: "Perro", age: "5 años", location: "Sevilla", imageUrl: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80", badge: "Apadrinado" },
+    { id: "1", animalName: "Mochi", animalAge: "2 años", animalLocation: "Madrid", animalEnergy: "Amigable", animalImg: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "2", animalName: "Luna", animalAge: "1 año", animalLocation: "Barcelona", animalEnergy: "Tranquila", animalImg: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "3", animalName: "Kira", animalAge: "3 años", animalLocation: "Valencia", animalEnergy: "Juguetona", animalImg: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "4", animalName: "Max", animalAge: "5 años", animalLocation: "Sevilla", animalEnergy: "Activo", animalImg: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
   ],
   adoptados: [
-    { id: "5", name: "Nala", species: "Gata", age: "4 años", location: "Bilbao", imageUrl: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80", badge: "Adoptado" },
-    { id: "6", name: "Bruno", species: "Perro", age: "6 años", location: "Zaragoza", imageUrl: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80", badge: "Adoptado" },
+    { id: "5", animalName: "Nala", animalAge: "4 años", animalLocation: "Bilbao", animalEnergy: "Cariñosa", animalImg: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80", badge: "Adoptado", badgeColor: "green" },
+    { id: "6", animalName: "Bruno", animalAge: "6 años", animalLocation: "Zaragoza", animalEnergy: "Tranquilo", animalImg: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80", badge: "Adoptado", badgeColor: "green" },
   ],
   favoritos: [
-    { id: "7", name: "Cleo", species: "Gata", age: "2 años", location: "Málaga", imageUrl: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80", isLiked: true },
-    { id: "8", name: "Rex", species: "Perro", age: "3 años", location: "Murcia", imageUrl: "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80", isLiked: true },
-    { id: "9", name: "Simba", species: "Gato", age: "1 año", location: "Granada", imageUrl: "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80", isLiked: true },
-    { id: "10", name: "Coco", species: "Perra", age: "7 años", location: "Córdoba", imageUrl: "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80", isLiked: true },
-    { id: "11", name: "Oli", species: "Gato", age: "5 años", location: "Alicante", imageUrl: "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80", isLiked: true },
+    { id: "7", animalName: "Cleo", animalAge: "2 años", animalLocation: "Málaga", animalEnergy: "Juguetona", animalImg: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80", isFavorite: true },
+    { id: "8", animalName: "Rex", animalAge: "3 años", animalLocation: "Murcia", animalEnergy: "Activo", animalImg: "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80", isFavorite: true },
+    { id: "9", animalName: "Simba", animalAge: "1 año", animalLocation: "Granada", animalEnergy: "Cariñoso", animalImg: "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80", isFavorite: true },
+    { id: "10", animalName: "Coco", animalAge: "7 años", animalLocation: "Córdoba", animalEnergy: "Tranquila", animalImg: "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80", isFavorite: true },
+    { id: "11", animalName: "Oli", animalAge: "5 años", animalLocation: "Alicante", animalEnergy: "Independiente", animalImg: "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80", isFavorite: true },
   ],
 };
 
 const TABS: { key: AnimalTab; label: string; emoji: string }[] = [
   { key: "apadrinados", label: "Apadrinados", emoji: "🐾" },
-  { key: "adoptados", label: "Adoptados", emoji: "🏠" },
-  { key: "favoritos", label: "Favoritos", emoji: "❤️" },
+  { key: "adoptados",   label: "Adoptados",   emoji: "🏠" },
+  { key: "favoritos",   label: "Favoritos",   emoji: "❤️" },
 ];
 
-// ─── AnimalCard ───────────────────────────────────────────────────────────────
-
-function AnimalCard({ animal, tab }: { animal: Animal; tab: AnimalTab }) {
-  const [liked, setLiked] = useState(animal.isLiked ?? false);
-
-  return (
-    <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm border border-stone-100 aspect-square group active:scale-[0.97] transition-transform duration-150">
-      {/* Image */}
-      <img
-        src={animal.imageUrl}
-        alt={animal.name}
-        className="w-full h-full object-cover"
-        loading="lazy"
-      />
-
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-      {/* Badge (apadrinado / adoptado) */}
-      {animal.badge && (
-        <div className="absolute top-2 left-2">
-          <span
-            className="px-2 py-0.5 rounded-full text-white font-semibold"
-            style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "9px",
-              background: tab === "adoptados" ? "#013b08" : "#f96302",
-            }}
-          >
-            {animal.badge}
-          </span>
-        </div>
-      )}
-
-      {/* Heart button for favoritos */}
-      {tab === "favoritos" && (
-        <button
-          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform"
-          onClick={(e) => { e.stopPropagation(); setLiked(!liked); }}
-          aria-label={liked ? "Quitar de favoritos" : "Añadir a favoritos"}
-        >
-          <Heart
-            size={14}
-            strokeWidth={2}
-            className={liked ? "text-[#f96302]" : "text-stone-400"}
-            fill={liked ? "#f96302" : "none"}
-          />
-        </button>
-      )}
-
-      {/* Info */}
-      <div className="absolute bottom-0 left-0 right-0 p-2.5">
-        <p
-          className="text-white font-bold leading-tight truncate"
-          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "13px" }}
-        >
-          {animal.name}
-        </p>
-        <div className="flex items-center gap-1 mt-0.5">
-          <span
-            className="text-white/80 truncate"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "10px" }}
-          >
-            {animal.species} · {animal.age}
-          </span>
-        </div>
-        <div className="flex items-center gap-0.5 mt-0.5">
-          <MapPin size={9} className="text-[#f96302] flex-shrink-0" />
-          <span
-            className="text-white/70 truncate"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "9px" }}
-          >
-            {animal.location}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── MyAnimals page ───────────────────────────────────────────────────────────
+const EMPTY_STATES: Record<AnimalTab, { title: string; subtitle: string }> = {
+  apadrinados: {
+    title: "Aún no tienes animales apadrinados",
+    subtitle: "Apadrinar a un animal cambia su vida entera.",
+  },
+  adoptados: {
+    title: "Aún no tienes animales adoptados",
+    subtitle: "Dale un hogar a alguien que lo necesita.",
+  },
+  favoritos: {
+    title: "Aún no tienes favoritos",
+    subtitle: "Guarda los peludos que más te gusten.",
+  },
+};
 
 export default function MyAnimals() {
   const [activeTab, setActiveTab] = useState<AnimalTab>("apadrinados");
-  const animals = MOCK_ANIMALS[activeTab];
+  const [animals, setAnimals] = useState(MOCK_ANIMALS);
+
+  const currentAnimals = animals[activeTab];
+  const { title, subtitle } = EMPTY_STATES[activeTab];
+  const activeTabMeta = TABS.find((t) => t.key === activeTab)!;
+
+  function handleFavoriteToggle(id: string) {
+    setAnimals((prev) => ({
+      ...prev,
+      [activeTab]: prev[activeTab].map((a) =>
+        a.id === id ? { ...a, isFavorite: !a.isFavorite } : a
+      ),
+    }));
+  }
 
   return (
-    <div
-      className="min-h-screen bg-stone-50"
-      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-    >
-      {/* Page title */}
-      <div className="bg-white px-5 pt-5 pb-4">
+    <div className="min-h-screen bg-surface">
+
+      {/* ── Header ─────────────────────────────────────── */}
+      <div className="bg-surface-container-lowest px-margin-mobile pt-6 pb-0 border-b border-outline-variant/20">
         <h1
-          className="text-[#013b08] font-extrabold tracking-tight"
-          style={{ fontSize: "22px" }}
+          className="text-primary font-headline-lg-mobile text-headline-lg-mobile"
+          style={{ fontFamily: "var(--font-jakarta)" }}
         >
           Mis Animales
         </h1>
-        <p className="text-stone-400 mt-0.5" style={{ fontSize: "13px" }}>
-          Tu historia con cada peludo 🐾
+        <p
+          className="text-on-surface-variant mt-1"
+          style={{ fontFamily: "var(--font-vietnam)", fontSize: "14px" }}
+        >
+          Tu historia con cada peludo
         </p>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mt-4">
+        {/* ── Tabs ───────────────────────────────────────── */}
+        <div className="flex gap-2 mt-5">
           {TABS.map(({ key, label, emoji }) => {
             const isActive = activeTab === key;
-            const count = MOCK_ANIMALS[key].length;
+            const count = animals[key].length;
             return (
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`flex-1 flex flex-col items-center py-2.5 px-1 rounded-2xl border transition-all duration-200 active:scale-95 ${
-                  isActive
-                    ? "bg-[#013b08] border-[#013b08] shadow-md"
-                    : "bg-white border-stone-200 hover:border-[#013b08]/30"
-                }`}
+                className={`
+                  flex-1 flex flex-col items-center
+                  py-3 px-1 rounded-2xl
+                  border transition-all duration-200 active:scale-95
+                  ${isActive
+                    ? "bg-primary border-primary"
+                    : "bg-surface-container-low border-outline-variant/30 hover:border-primary/40"
+                  }
+                `}
               >
-                <span style={{ fontSize: "18px" }}>{emoji}</span>
+                <span style={{ fontSize: "20px", lineHeight: 1 }}>{emoji}</span>
                 <span
-                  className={`font-bold mt-0.5 ${isActive ? "text-white" : "text-[#013b08]"}`}
-                  style={{ fontSize: "15px" }}
+                  className={`font-bold mt-1 ${isActive ? "text-on-primary" : "text-primary"}`}
+                  style={{ fontFamily: "var(--font-jakarta)", fontSize: "17px" }}
                 >
                   {count}
                 </span>
                 <span
-                  className={`font-medium text-center leading-tight mt-0.5 ${
-                    isActive ? "text-white/80" : "text-stone-400"
+                  className={`font-medium text-center leading-tight ${
+                    isActive ? "text-on-primary/75" : "text-on-surface-variant"
                   }`}
-                  style={{ fontSize: "9.5px" }}
+                  style={{ fontFamily: "var(--font-jakarta)", fontSize: "10px" }}
                 >
                   {label}
                 </span>
                 {isActive && (
-                  <span className="mt-1.5 w-4 h-0.5 rounded-full bg-[#f96302]" />
+                  <span
+                    className="mt-1.5 w-5 h-0.5 rounded-full"
+                    style={{ background: "var(--color-warm-orange)" }}
+                  />
                 )}
               </button>
             );
           })}
         </div>
+
+        {/* Barra naranja activa de la tab como underline de la sección */}
+        <div className="mt-4 h-px bg-outline-variant/20" />
       </div>
 
-      {/* Grid */}
-      <div className="px-4 pt-4 pb-28">
-        {animals.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#013b08]/8 flex items-center justify-center mb-3">
-              <span style={{ fontSize: "28px" }}>
-                {TABS.find((t) => t.key === activeTab)?.emoji}
-              </span>
-            </div>
-            <p className="text-[#013b08] font-semibold" style={{ fontSize: "15px" }}>
-              Aún no tienes{" "}
-              {activeTab === "apadrinados"
-                ? "animales apadrinados"
-                : activeTab === "adoptados"
-                ? "animales adoptados"
-                : "favoritos"}
-            </p>
-            <p className="text-stone-400 mt-1" style={{ fontSize: "13px" }}>
-              ¡Explora y encuentra tu compañero perfecto!
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {animals.map((animal) => (
-              <AnimalCard key={animal.id} animal={animal} tab={activeTab} />
-            ))}
-          </div>
-        )}
+      {/* ── Grid ───────────────────────────────────────── */}
+      <div className="pt-4">
+        <AnimalGrid
+          animals={currentAnimals}
+          onFavoriteToggle={handleFavoriteToggle}
+          emptyEmoji={activeTabMeta.emoji}
+          emptyTitle={title}
+          emptySubtitle={subtitle}
+        />
       </div>
+
     </div>
   );
 }
