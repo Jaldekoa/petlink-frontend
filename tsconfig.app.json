@@ -27,7 +27,8 @@
       "@features/*": ["./src/features/*"],
       "@ui/*": ["./src/shared/ui/*"],
       "@routes/*": ["./src/routes/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src"]
