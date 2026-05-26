@@ -1,13 +1,13 @@
 import TopBar from "@/shared/components/main/Header";
 import NavBar from "@/shared/components/main/NavBar";
-import Home from "../../../features/home/Home"
+import Home from "@features/home/home";
 
 export default function Main() {
-    return (
+  return (
     <>
-    <TopBar />
-        <Home />
-    <NavBar />  
+      <TopBar />
+      <Home />
+      <NavBar />
     </>
-    )
+  );
 }
