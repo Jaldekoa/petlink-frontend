@@ -1,3 +1,11 @@
+import SearchBar from "./components/SearchBar";
+import SearchFilters from "./components/SearchFilters";
+
 export default function Search() {
-  return <h1>Search</h1>;
+  return (
+    <>
+      <SearchBar />
+      <SearchFilters />
+    </>
+  );
 }
