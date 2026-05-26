@@ -1,57 +1,51 @@
-import { useState } from "react";
-import { Heart, MapPin } from "lucide-react";
-import type { AnimalCardProps } from "@/shared/types/animal.types";
+export interface AnimalCardProps {
+  img: string;
+  name: string;
+  location: string;
+  pill?: string;
+  featureOne?: string;
+  featureTwo?: string;
+  isFavorite?: boolean;
+}
 
+export default function AnimalCard({ animalData }: { animalData: AnimalCardProps }) {
 
-export default function AnimalCard({ animal, tab }: AnimalCardProps) {
-  const [liked, setLiked] = useState(animal.isLiked ?? false);
+  const { img, name, location, pill, featureOne, featureTwo, isFavorite = false } = animalData
 
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm border border-stone-100 aspect-square active:scale-[0.97] transition-transform duration-150">
-      <img
-        src={animal.imageUrl}
-        alt={animal.name}
-        className="w-full h-full object-cover"
-        loading="lazy"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+    <div className="pop-out-container relative mt-16">
+      <div
+        className="bg-secondary-container rounded-4xl p-6 pt-16 flex flex-col justify-end h-64 relative overflow-visible">
 
-      {animal.badge && (
-        <div className="absolute top-2 left-2">
-          <span
-            className="px-2 py-0.5 rounded-full text-white font-semibold"
-            style={{
-              fontSize: "9px",
-              background: tab === "adoptados" ? "#013b08" : "#f96302",
-            }}
-          >
-            {animal.badge}
-          </span>
+        <img alt="Dog popping out"
+          className="rounded-4xl absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 object-contain pointer-events-none"
+          data-alt="A friendly brown dachshund dog with large expressive eyes leaning over the edge of its container, appearing to pop out of the screen. The dog is photorealistic with soft brown fur, set against a bright, airy background. The overall style is playful and modern with high-key lighting that emphasizes the pet's warmth and friendly personality."
+          src={img} />
+
+        <div className="mt-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="font-headline-md text-primary">{name}</h4>
+              <p className="font-body-sm text-on-surface-variant flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm">location_on</span> {location}
+              </p>
+            </div>
+            <div className="bg-on-tertiary-container text-white px-3 py-1 rounded-full text-label-sm">
+              {pill}
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <span
+              className="bg-surface/50 px-3 py-1 rounded-full text-label-sm text-secondary">{featureOne}</span>
+            <span className="bg-surface/50 px-3 py-1 rounded-full text-label-sm text-secondary">{featureTwo}</span>
+          </div>
         </div>
-      )}
 
-      {tab === "favoritos" && (
         <button
-          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center active:scale-90 transition-transform"
-          onClick={(e) => { e.stopPropagation(); setLiked(!liked); }}
-          aria-label={liked ? "Quitar de favoritos" : "Añadir a favoritos"}
-        >
-          <Heart
-            size={14}
-            strokeWidth={2}
-            className={liked ? "text-[#f96302]" : "text-stone-400"}
-            fill={liked ? "#f96302" : "none"}
-          />
+          className="absolute bottom-6 right-6 bg-tertiary-container text-on-tertiary-container w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+          <span className="material-symbols-outlined">favorite</span>{isFavorite}
         </button>
-      )}
 
-      <div className="absolute bottom-0 left-0 right-0 p-2.5">
-        <p className="text-white font-bold text-[13px] truncate">{animal.name}</p>
-        <p className="text-white/80 text-[10px] mt-0.5">{animal.species} · {animal.age}</p>
-        <div className="flex items-center gap-0.5 mt-0.5">
-          <MapPin size={9} className="text-[#f96302]" />
-          <span className="text-white/70 text-[9px]">{animal.location}</span>
-        </div>
       </div>
     </div>
   );
