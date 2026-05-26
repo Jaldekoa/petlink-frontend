@@ -24,7 +24,7 @@ export default function NavBar() {
           <span className="font-label-sm">Buscar</span>
         </Link>
 
-        <Link to="/animals"
+        <Link to="/chat"
           className="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1.5 hover:bg-surface-container-high rounded-full active:scale-95 transition-all">
           <span className="material-symbols-outlined">chat</span>
           <span className="font-label-sm">Chat</span>
