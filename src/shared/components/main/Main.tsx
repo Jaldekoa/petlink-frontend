@@ -1,12 +1,16 @@
+import type { ReactNode } from "react";
 import TopBar from "@/shared/components/main/Header";
 import NavBar from "@/shared/components/main/NavBar";
-import Home from "@features/home/home";
 
-export default function Main() {
+interface MainProps {
+  children: ReactNode;
+}
+
+export default function Main({ children }: MainProps) {
   return (
     <>
       <TopBar />
-      <Home />
+      <main className="pt-20 pb-24 space-y-stack-lg">{children}</main>
       <NavBar />
     </>
   );
