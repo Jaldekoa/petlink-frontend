@@ -6,120 +6,21 @@ import type { Animal, AnimalTab } from "@/shared/types/animal.types.ts";
 
 const MOCK_ANIMALS: Record<AnimalTab, Animal[]> = {
   apadrinados: [
-    {
-      id: "1",
-      name: "Mochi",
-      species: "Perro",
-      age: "2 años",
-      location: "Madrid",
-      imageUrl:
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
-      badge: "Apadrinado",
-    },
-    {
-      id: "2",
-      name: "Luna",
-      species: "Gato",
-      age: "1 año",
-      location: "Barcelona",
-      imageUrl:
-        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80",
-      badge: "Apadrinado",
-    },
-    {
-      id: "3",
-      name: "Kira",
-      species: "Perra",
-      age: "3 años",
-      location: "Valencia",
-      imageUrl:
-        "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
-      badge: "Apadrinado",
-    },
-    {
-      id: "4",
-      name: "Max",
-      species: "Perro",
-      age: "5 años",
-      location: "Sevilla",
-      imageUrl:
-        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80",
-      badge: "Apadrinado",
-    },
+    { id: "1", name: "Mochi", species: "Perro", age: "2 años", location: "Madrid", imageUrl: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80", badge: "Apadrinado" },
+    { id: "2", name: "Luna", species: "Gato", age: "1 año", location: "Barcelona", imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80", badge: "Apadrinado" },
+    { id: "3", name: "Kira", species: "Perra", age: "3 años", location: "Valencia", imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80", badge: "Apadrinado" },
+    { id: "4", name: "Max", species: "Perro", age: "5 años", location: "Sevilla", imageUrl: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80", badge: "Apadrinado" },
   ],
   adoptados: [
-    {
-      id: "5",
-      name: "Nala",
-      species: "Gata",
-      age: "4 años",
-      location: "Bilbao",
-      imageUrl:
-        "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80",
-      badge: "Adoptado",
-    },
-    {
-      id: "6",
-      name: "Bruno",
-      species: "Perro",
-      age: "6 años",
-      location: "Zaragoza",
-      imageUrl:
-        "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80",
-      badge: "Adoptado",
-    },
+    { id: "5", name: "Nala", species: "Gata", age: "4 años", location: "Bilbao", imageUrl: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80", badge: "Adoptado" },
+    { id: "6", name: "Bruno", species: "Perro", age: "6 años", location: "Zaragoza", imageUrl: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80", badge: "Adoptado" },
   ],
   favoritos: [
-    {
-      id: "7",
-      name: "Cleo",
-      species: "Gata",
-      age: "2 años",
-      location: "Málaga",
-      imageUrl:
-        "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80",
-      isLiked: true,
-    },
-    {
-      id: "8",
-      name: "Rex",
-      species: "Perro",
-      age: "3 años",
-      location: "Murcia",
-      imageUrl:
-        "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80",
-      isLiked: true,
-    },
-    {
-      id: "9",
-      name: "Simba",
-      species: "Gato",
-      age: "1 año",
-      location: "Granada",
-      imageUrl:
-        "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80",
-      isLiked: true,
-    },
-    {
-      id: "10",
-      name: "Coco",
-      species: "Perra",
-      age: "7 años",
-      location: "Córdoba",
-      imageUrl:
-        "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80",
-      isLiked: true,
-    },
-    {
-      id: "11",
-      name: "Oli",
-      species: "Gato",
-      age: "5 años",
-      location: "Alicante",
-      imageUrl:
-        "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80",
-      isLiked: true,
-    },
+    { id: "7", name: "Cleo", species: "Gata", age: "2 años", location: "Málaga", imageUrl: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80", isLiked: true },
+    { id: "8", name: "Rex", species: "Perro", age: "3 años", location: "Murcia", imageUrl: "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80", isLiked: true },
+    { id: "9", name: "Simba", species: "Gato", age: "1 año", location: "Granada", imageUrl: "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80", isLiked: true },
+    { id: "10", name: "Coco", species: "Perra", age: "7 años", location: "Córdoba", imageUrl: "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80", isLiked: true },
+    { id: "11", name: "Oli", species: "Gato", age: "5 años", location: "Alicante", imageUrl: "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80", isLiked: true },
   ],
 };
 
@@ -167,10 +68,7 @@ function AnimalCard({ animal, tab }: { animal: Animal; tab: AnimalTab }) {
       {tab === "favoritos" && (
         <button
           className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform"
-          onClick={(e) => {
-            e.stopPropagation();
-            setLiked(!liked);
-          }}
+          onClick={(e) => { e.stopPropagation(); setLiked(!liked); }}
           aria-label={liked ? "Quitar de favoritos" : "Añadir a favoritos"}
         >
           <Heart
@@ -186,20 +84,14 @@ function AnimalCard({ animal, tab }: { animal: Animal; tab: AnimalTab }) {
       <div className="absolute bottom-0 left-0 right-0 p-2.5">
         <p
           className="text-white font-bold leading-tight truncate"
-          style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontSize: "13px",
-          }}
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "13px" }}
         >
           {animal.name}
         </p>
         <div className="flex items-center gap-1 mt-0.5">
           <span
             className="text-white/80 truncate"
-            style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "10px",
-            }}
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "10px" }}
           >
             {animal.species} · {animal.age}
           </span>
@@ -208,10 +100,7 @@ function AnimalCard({ animal, tab }: { animal: Animal; tab: AnimalTab }) {
           <MapPin size={9} className="text-[#f96302] flex-shrink-0" />
           <span
             className="text-white/70 truncate"
-            style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "9px",
-            }}
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "9px" }}
           >
             {animal.location}
           </span>
@@ -292,16 +181,13 @@ export default function MyAnimals() {
                 {TABS.find((t) => t.key === activeTab)?.emoji}
               </span>
             </div>
-            <p
-              className="text-[#013b08] font-semibold"
-              style={{ fontSize: "15px" }}
-            >
+            <p className="text-[#013b08] font-semibold" style={{ fontSize: "15px" }}>
               Aún no tienes{" "}
               {activeTab === "apadrinados"
                 ? "animales apadrinados"
                 : activeTab === "adoptados"
-                  ? "animales adoptados"
-                  : "favoritos"}
+                ? "animales adoptados"
+                : "favoritos"}
             </p>
             <p className="text-stone-400 mt-1" style={{ fontSize: "13px" }}>
               ¡Explora y encuentra tu compañero perfecto!
