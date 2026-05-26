@@ -1,168 +1,48 @@
-// AnimalCard.tsx
-
 interface AnimalCardProps {
-  animalImg: string;
-  animalName: string;
-  animalLocation: string;
-  animalAge: string;
-  animalEnergy: string;
+  img: string;
+  name: string;
+  location: string;
+  pill?: string;
+  featureOne?: string;
+  featureTwo?: string;
   isFavorite?: boolean;
-  onFavoriteToggle?: () => void;
 }
 
-export default function AnimalCard({
-  animalImg,
-  animalName,
-  animalLocation,
-  animalAge,
-  animalEnergy,
-  isFavorite = false,
-  onFavoriteToggle,
-}: AnimalCardProps) {
+export default function AnimalCard({ img, name, location, pill, featureOne, featureTwo, isFavorite = false }: AnimalCardProps) {
   return (
-    <div
-      className="
-        min-w-[82%]
-        max-w-[82%]
-        flex-shrink-0
-        snap-start
-        cursor-pointer
-        group
-      "
-    >
+    <div className="pop-out-container relative mt-16">
       <div
-        className="
-          bg-secondary-container
-          relative
-          rounded-3xl
-          border border-outline-variant/20
-         
-          p-3
-          shadow-sm
-          hover:shadow-md
-          hover:-translate-y-0.5
-          transition-all duration-300
-        "
-      >
-        {/* Imagen */}
-        <div className="relative overflow-hidden rounded-2xl bg-secondary-container">
-          <img
-            src={animalImg}
-            alt={animalName}
-            className="
-              w-full
-              h-52
-              object-cover
-              group-hover:scale-105
-              transition-transform duration-500
-            "
-          />
+        className="bg-secondary-container rounded-4xl p-6 pt-16 flex flex-col justify-end h-64 relative overflow-visible">
 
-          {/* Botón favorito */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onFavoriteToggle?.();
-            }}
-            aria-label={
-              isFavorite
-                ? "Quitar de favoritos"
-                : "Añadir a favoritos"
-            }
-            className="
-              absolute
-              bottom-3
-              right-3
-              flex
-              items-center
-              justify-center
-              w-11
-              h-11
-              rounded-full
-              backdrop-blur-md
-              bg-black/25
-              hover:bg-black/35
-              active:scale-90
-              transition-all duration-200
-            "
-          >
+        <img alt="Dog popping out"
+          className="rounded-4xl absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 object-contain pointer-events-none"
+          data-alt="A friendly brown dachshund dog with large expressive eyes leaning over the edge of its container, appearing to pop out of the screen. The dog is photorealistic with soft brown fur, set against a bright, airy background. The overall style is playful and modern with high-key lighting that emphasizes the pet's warmth and friendly personality."
+          src={img} />
+
+        <div className="mt-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="font-headline-md text-primary">{name}</h4>
+              <p className="font-body-sm text-on-surface-variant flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm">location_on</span> {location}
+              </p>
+            </div>
+            <div className="bg-on-tertiary-container text-white px-3 py-1 rounded-full text-label-sm">
+              {pill}
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4">
             <span
-              className="material-symbols-outlined"
-              style={{
-                color: isFavorite
-                  ? "var(--color-warm-orange)"
-                  : "white",
-                fontVariationSettings: isFavorite
-                  ? "'FILL' 1"
-                  : "'FILL' 0",
-                transition: "all 0.2s",
-              }}
-            >
-              favorite
-            </span>
-          </button>
-        </div>
-
-        {/* Información */}
-        <div className="pt-4 px-1">
-
-          {/* Nombre */}
-          <h3
-            className="
-              text-xl
-              font-semibold
-              text-on-surface
-              leading-tight
-              truncate
-            "
-          >
-            {animalName}
-          </h3>
-
-          {/* Localización */}
-          <div className="flex items-center gap-1 mt-1 text-sm text-on-surface-variant">
-            <span className="material-symbols-outlined text-[18px]">
-              location_on
-            </span>
-
-            <span className="truncate">
-              {animalLocation}
-            </span>
-          </div>
-
-          {/* Chips */}
-          <div className="flex flex-wrap gap-2 mt-4">
-
-            <div
-              className="
-                px-3
-                py-1.5
-                rounded-full
-                bg-surface-container-high
-                text-on-surface
-                text-sm
-                font-medium
-              "
-            >
-              {animalAge}
-            </div>
-
-            <div
-              className="
-                px-3
-                py-1.5
-                rounded-full
-                bg-surface-container-high
-                text-on-surface
-                text-sm
-                font-medium
-              "
-            >
-              {animalEnergy}
-            </div>
-
+              className="bg-surface/50 px-3 py-1 rounded-full text-label-sm text-secondary">{featureOne}</span>
+            <span className="bg-surface/50 px-3 py-1 rounded-full text-label-sm text-secondary">{featureTwo}</span>
           </div>
         </div>
+
+        <button
+          className="absolute bottom-6 right-6 bg-tertiary-container text-on-tertiary-container w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+          <span className="material-symbols-outlined">favorite</span>{isFavorite}
+        </button>
+
       </div>
     </div>
   );
