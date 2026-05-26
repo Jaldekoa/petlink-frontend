@@ -6,6 +6,7 @@ import Search from "@features/search/search";
 import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
 import MainLayout from "@shared/layout/Layout";
+import AnimalProfile from "@/features/animal-profile/animalProfile";
 
 export async function mainLoader() {
   const isAuthenticated = await authUser();
@@ -44,6 +45,12 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <MainLayout />,
     children: [{ index: true, element: <Profile /> }],
+    loader: mainLoader,
+  },
+  {
+    path: "/animal-profile",
+    element: <MainLayout />,
+    children: [{ index: true, element: <AnimalProfile /> }],
     loader: mainLoader,
   },
 ]);
