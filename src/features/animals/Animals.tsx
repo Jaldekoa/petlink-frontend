@@ -1,8 +1,13 @@
-// Animals.tsx
 import { useState } from "react";
-import AnimalGrid, { type AnimalGridItem } from "../../shared/components/main/AnimalGrid";
+import AnimalList, { type AnimalGridItem } from "../../shared/components/main/AnimalList";
 
 type AnimalTab = "apadrinados" | "adoptados" | "favoritos";
+
+interface TabConfig {
+  key: AnimalTab;
+  label: string;
+  emoji: string;
+}
 
 const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   apadrinados: [
@@ -24,7 +29,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   ],
 };
 
-const TABS: { key: AnimalTab; label: string; emoji: string }[] = [
+const TABS: TabConfig[] = [
   { key: "apadrinados", label: "Apadrinados", emoji: "🐾" },
   { key: "adoptados",   label: "Adoptados",   emoji: "🏠" },
   { key: "favoritos",   label: "Favoritos",   emoji: "❤️" },
@@ -53,93 +58,89 @@ export default function MyAnimals() {
   const { title, subtitle } = EMPTY_STATES[activeTab];
   const activeTabMeta = TABS.find((t) => t.key === activeTab)!;
 
-  function handleFavoriteToggle(id: string) {
+  const handleFavoriteToggle = (id: string) => {
     setAnimals((prev) => ({
       ...prev,
-      [activeTab]: prev[activeTab].map((a) =>
-        a.id === id ? { ...a, isFavorite: !a.isFavorite } : a
+      [activeTab]: prev[activeTab].map((animal) =>
+        animal.id === id ? { ...animal, isFavorite: !animal.isFavorite } : animal
       ),
     }));
-  }
+  };
 
   return (
-    <div className="min-h-screen bg-surface">
-
-      {/* ── Header ─────────────────────────────────────── */}
-      <div className="bg-surface-container-lowest px-margin-mobile pt-6 pb-0 border-b border-outline-variant/20">
-        <h1
-          className="text-primary font-headline-lg-mobile text-headline-lg-mobile"
-          style={{ fontFamily: "var(--font-jakarta)" }}
-        >
-          Mis Animales
-        </h1>
-        <p
-          className="text-on-surface-variant mt-1"
-          style={{ fontFamily: "var(--font-vietnam)", fontSize: "14px" }}
-        >
-          Tu historia con cada peludo
-        </p>
-
-        {/* ── Tabs ───────────────────────────────────────── */}
-        <div className="flex gap-2 mt-5">
-          {TABS.map(({ key, label, emoji }) => {
-            const isActive = activeTab === key;
-            const count = animals[key].length;
-            return (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={`
-                  flex-1 flex flex-col items-center
-                  py-3 px-1 rounded-2xl
-                  border transition-all duration-200 active:scale-95
-                  ${isActive
-                    ? "bg-primary border-primary"
-                    : "bg-surface-container-low border-outline-variant/30 hover:border-primary/40"
-                  }
-                `}
-              >
-                <span style={{ fontSize: "20px", lineHeight: 1 }}>{emoji}</span>
-                <span
-                  className={`font-bold mt-1 ${isActive ? "text-on-primary" : "text-primary"}`}
-                  style={{ fontFamily: "var(--font-jakarta)", fontSize: "17px" }}
-                >
-                  {count}
-                </span>
-                <span
-                  className={`font-medium text-center leading-tight ${
-                    isActive ? "text-on-primary/75" : "text-on-surface-variant"
-                  }`}
-                  style={{ fontFamily: "var(--font-jakarta)", fontSize: "10px" }}
-                >
-                  {label}
-                </span>
-                {isActive && (
-                  <span
-                    className="mt-1.5 w-5 h-0.5 rounded-full"
-                    style={{ background: "var(--color-warm-orange)" }}
-                  />
-                )}
-              </button>
-            );
-          })}
+    <div className="min-h-screen bg-surface selection:bg-secondary-container">
+      
+      {/* ── HEADER & NAVIGATION ────────────────────────── */}
+      <header className="bg-surface-container-lowest px-6 pt-8 pb-5 shadow-xs border-b border-outline-variant/10 md:px-12">
+        <div className="max-w-6xl mx-auto space-y-1">
+          <h1 className="text-primary font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg">
+            Mis Animales
+          </h1>
+          <p className="text-on-surface-variant font-body-sm text-body-sm md:text-body-md">
+            Tu historia con cada peludo
+          </p>
         </div>
 
-        {/* Barra naranja activa de la tab como underline de la sección */}
-        <div className="mt-4 h-px bg-outline-variant/20" />
-      </div>
+        {/* ── TABS CONTAINER ────────────────────────────── */}
+        <nav className="max-w-6xl mx-auto mt-6">
+          <div className="grid grid-cols-3 gap-3 md:flex md:justify-start md:gap-4">
+            {TABS.map(({ key, label, emoji }) => {
+              const isActive = activeTab === key;
+              const count = animals[key].length;
+              
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveTab(key)}
+                  className={`
+                    group relative flex flex-col items-center justify-between
+                    p-3 rounded-2xl border transition-all duration-300 ease-out
+                    cursor-pointer active:scale-98 md:w-36 md:h-28
+                    ${isActive
+                      ? "bg-primary border-primary shadow-md shadow-primary/10"
+                      : "bg-surface-container-low border-outline-variant/20 hover:bg-surface-container hover:border-outline/40"
+                    }
+                  `}
+                >
+                  {/* Emoji Icon */}
+                  <span className="text-2xl transition-transform duration-300 group-hover:scale-110">
+                    {emoji}
+                  </span>
 
-      {/* ── Grid ───────────────────────────────────────── */}
-      <div className="pt-4">
-        <AnimalGrid
+                  {/* Count & Label Wrapper */}
+                  <div className="flex flex-col items-center mt-2 w-full">
+                    <span className={`font-headline-md text-body-md md:text-headline-md leading-none ${isActive ? "text-on-primary" : "text-primary"}`}>
+                      {count}
+                    </span>
+                    <span className={`font-label-sm text-[11px] md:text-label-sm text-center tracking-wide mt-1 uppercase ${
+                      isActive ? "text-on-primary-fixed-dim" : "text-on-surface-variant"
+                    }`}>
+                      {label}
+                    </span>
+                  </div>
+
+                  {/* Active Indicator (Indicator Line) */}
+                  {isActive && (
+                    <span className="absolute -bottom-1 w-8 h-1 bg-warm-orange rounded-full shadow-xs animate-fade-in" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      </header>
+
+      {/* ── GRID CONTENT ───────────────────────────────── */}
+      <main className="max-w-6xl mx-auto px-6 py-8 md:px-12">
+        <AnimalList
           animals={currentAnimals}
           onFavoriteToggle={handleFavoriteToggle}
           emptyEmoji={activeTabMeta.emoji}
           emptyTitle={title}
           emptySubtitle={subtitle}
         />
-      </div>
-
+      </main>
+      
     </div>
   );
 }
