@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Heart, MapPin } from "lucide-react";
-import type { Animal, AnimalTab, AnimalCardProps } from "@/shared/types/animal.types";
+import type { AnimalCardProps } from "@/shared/types/animal.types";
 
 
 export default function AnimalCard({ animal, tab }: AnimalCardProps) {
