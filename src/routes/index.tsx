@@ -1,17 +1,18 @@
 import { createBrowserRouter, redirect } from "react-router";
 import Home from "@features/home/home";
-import Animals from "@features/animals/Animals";
+import Animals from "@features/animals/animals";
 import Search from "@features/search/search";
 import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
 import MainLayout from "@shared/layout/Layout";
 import AnimalProfile from "@/features/animal-profile/animalProfile";
+import AuthGate from "@/features/auth/AuthGate";
 
 export async function mainLoader() {
   const isAuthenticated = true;
 
   if (!isAuthenticated) {
-    return redirect("/");
+    return redirect("/login");
   }
 
   return isAuthenticated;
@@ -51,6 +52,11 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [{ index: true, element: <AnimalProfile /> }],
     loader: mainLoader,
+  },
+  {
+    path: "/login",
+    element: <MainLayout />,
+    children: [{ index: true, element: <AuthGate /> }],
   },
 ]);
 
