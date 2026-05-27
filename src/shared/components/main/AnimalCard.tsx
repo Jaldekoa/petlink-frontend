@@ -8,6 +8,7 @@ interface AnimalCardProps {
   badge?: string;
   badgeColor?: "orange" | "green" | "blue";
   onFavoriteToggle?: () => void;
+  favoriteDisabled?: boolean;
   onOpen?: () => void;
 }
 
@@ -21,6 +22,7 @@ export default function AnimalCard({
   badge,
   badgeColor = "blue",
   onFavoriteToggle,
+  favoriteDisabled = false,
   onOpen,
 }: AnimalCardProps) {
   const badgeColorClass = {
@@ -73,18 +75,22 @@ export default function AnimalCard({
           <button
             onClick={(e) => {
               e.stopPropagation();
+              if (favoriteDisabled) return;
               onFavoriteToggle?.();
             }}
+            disabled={favoriteDisabled}
+            aria-disabled={favoriteDisabled}
             aria-label={
               isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"
             }
-            className="
+            className={`
               absolute bottom-4 right-4
               flex items-center justify-center w-11 h-11
               rounded-full backdrop-blur-md bg-black/30
               hover:bg-black/40 active:scale-90
               transition-all duration-200
-            "
+              ${favoriteDisabled ? "opacity-60 cursor-wait" : ""}
+            `}
           >
             <span
               className="material-symbols-outlined text-[22px]"

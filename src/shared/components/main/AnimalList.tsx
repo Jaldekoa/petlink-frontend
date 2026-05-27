@@ -16,6 +16,7 @@ export interface AnimalGridItem {
 interface AnimalGridProps {
   animals: AnimalGridItem[];
   onFavoriteToggle?: (id: string) => void;
+  pendingFavoriteId?: string | null;
   emptyIcon?: string;
   emptyTitle?: string;
   emptySubtitle?: string;
@@ -24,6 +25,7 @@ interface AnimalGridProps {
 export default function AnimalGrid({
   animals,
   onFavoriteToggle,
+  pendingFavoriteId,
   emptyIcon = "pets",
   emptyTitle = "Aún no tienes animales aquí",
   emptySubtitle = "¡Explora y encuentra tu compañero perfecto!",
@@ -77,6 +79,7 @@ export default function AnimalGrid({
               badge={animal.badge}
               badgeColor={animal.badgeColor}
               onFavoriteToggle={() => onFavoriteToggle?.(animal.id)}
+              favoriteDisabled={pendingFavoriteId === animal.id}
               onOpen={() => navigate(`/animals/${animal.id}`)}
             />
           </div>

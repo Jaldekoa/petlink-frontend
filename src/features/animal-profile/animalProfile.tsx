@@ -12,6 +12,7 @@ export default function AnimalProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [favoriteError, setFavoriteError] = useState("");
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -60,9 +61,10 @@ export default function AnimalProfile() {
   }, [animalId]);
 
   const handleFavoriteToggle = async () => {
-    if (!animalId) return;
+    if (!animalId || favoriteLoading) return;
 
     setFavoriteError("");
+    setFavoriteLoading(true);
 
     try {
       const result = await toggleLike(animalId);
@@ -73,6 +75,8 @@ export default function AnimalProfile() {
           ? err.message
           : "No se pudo actualizar el favorito",
       );
+    } finally {
+      setFavoriteLoading(false);
     }
   };
 
@@ -116,6 +120,8 @@ export default function AnimalProfile() {
           <button
             className="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high rounded-full p-2 transition-colors active:scale-90"
             onClick={handleFavoriteToggle}
+            disabled={favoriteLoading}
+            aria-disabled={favoriteLoading}
             aria-label={
               isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"
             }

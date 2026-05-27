@@ -57,6 +57,10 @@ export default function MyAnimals() {
   const [animals, setAnimals] = useState(EMPTY_ANIMALS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [favoriteError, setFavoriteError] = useState("");
+  const [pendingFavoriteId, setPendingFavoriteId] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     let ignore = false;
@@ -132,6 +136,11 @@ export default function MyAnimals() {
   const { icon, title, subtitle } = EMPTY_STATES[activeTab];
 
   const handleFavoriteToggle = async (id: string) => {
+    if (pendingFavoriteId) return;
+
+    setFavoriteError("");
+    setPendingFavoriteId(id);
+
     try {
       const result = await toggleLike(id);
 
@@ -148,11 +157,13 @@ export default function MyAnimals() {
         };
       });
     } catch (err) {
-      setError(
+      setFavoriteError(
         err instanceof Error
           ? err.message
           : "No se pudo actualizar el favorito",
       );
+    } finally {
+      setPendingFavoriteId(null);
     }
   };
 
@@ -240,6 +251,12 @@ export default function MyAnimals() {
         <main className="max-w-6xl mx-auto px-6 py-8 md:px-12">
           {loading && <StatusMessage icon="progress_activity" title="Cargando tus animales..." />}
 
+          {!loading && favoriteError && (
+            <div className="mb-4 rounded-2xl border border-error/20 bg-error/10 px-4 py-3 text-error font-body-sm text-body-sm">
+              {favoriteError}
+            </div>
+          )}
+
           {!loading && error && (
             <StatusMessage
               icon="error"
@@ -252,6 +269,7 @@ export default function MyAnimals() {
             <AnimalList
               animals={currentAnimals}
               onFavoriteToggle={handleFavoriteToggle}
+              pendingFavoriteId={pendingFavoriteId}
               emptyIcon={icon}
               emptyTitle={title}
               emptySubtitle={subtitle}
