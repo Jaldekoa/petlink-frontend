@@ -5,17 +5,18 @@ import Search from "@features/search/search";
 import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
 import MainLayout from "@shared/layout/Layout";
-import AnimalProfile from "@/features/animal-profile/animalProfile";
 import AuthGate from "@/features/auth/AuthGate";
 
-export async function mainLoader() {
-  const isAuthenticated = true;
+import { isAuthenticated } from "@services/auth.service";
 
-  if (!isAuthenticated) {
+export async function mainLoader() {
+  const hasAccess = isAuthenticated();
+
+  if (!hasAccess) {
     return redirect("/login");
   }
 
-  return isAuthenticated;
+  return hasAccess;
 }
 
 const router = createBrowserRouter([
@@ -47,12 +48,7 @@ const router = createBrowserRouter([
     children: [{ index: true, element: <Profile /> }],
     loader: mainLoader,
   },
-  {
-    path: "/animal-profile",
-    element: <MainLayout />,
-    children: [{ index: true, element: <AnimalProfile /> }],
-    loader: mainLoader,
-  },
+
   {
     path: "/login",
     element: <MainLayout />,
