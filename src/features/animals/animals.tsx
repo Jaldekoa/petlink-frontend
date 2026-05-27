@@ -15,14 +15,9 @@ const TABS: TabConfig[] = [
   { key: "apadrinados", label: "Apadrinados", icon: "volunteer_activism" },
   { key: "adoptados", label: "Adoptados", icon: "home" },
   { key: "favoritos", label: "Favoritos", icon: "favorite" },
-  { key: "adoptados", label: "Adoptados", icon: "home" },
-  { key: "favoritos", label: "Favoritos", icon: "favorite" },
 ];
 
-const EMPTY_STATES: Record<
-  AnimalTab,
-  { icon: string; title: string; subtitle: string }
-> = {
+const EMPTY_STATES: Record< AnimalTab,{ icon: string; title: string; subtitle: string }> = {
   apadrinados: {
     icon: "volunteer_activism",
     title: "Aún no tienes animales apadrinados",

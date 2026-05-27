@@ -10,6 +10,7 @@ export const apiClient = {
         const res = await fetch(`${API_URL}${endpoint}`, {
             headers: getAuthHeader()
         })
+        
         if (!res.ok) throw new Error(await res.json().then(d => d.error))
         return res.json()
     },
@@ -49,6 +50,7 @@ export const apiClient = {
             method: 'DELETE',
             headers: getAuthHeader()
         })
+        
         if (!res.ok) throw new Error(await res.json().then(d => d.error))
     }
 }

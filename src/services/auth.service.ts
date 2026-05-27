@@ -1,6 +1,5 @@
 import type { AuthResponse, LoginDTO, RegisterDTO } from "@/shared/types/auth.types"
 
-
 const API_URL = import.meta.env.VITE_API_URL
 
 export const login = async (data: LoginDTO): Promise<AuthResponse> => {

@@ -1,10 +1,9 @@
 import { apiClient } from "@/shared/lib/apiClient"
 import type { Animal, AnimalFilters, AnimalImage, CreateAnimalDTO, UpdateAnimalDTO } from "@/shared/types/animal.types"
-import type { PaginatedResponse } from "@/shared/types/pagination.type"
 
 export const getAnimals = (filters?: AnimalFilters) => {
     const query = filters ? '?' + new URLSearchParams(filters as any).toString() : ''
-    return apiClient.get<PaginatedResponse<Animal>>(`/animals${query}`)
+    return apiClient.get<Animal[]>(`/animals${query}`)
 }
 
 export const getAnimalById = (id: string) =>
