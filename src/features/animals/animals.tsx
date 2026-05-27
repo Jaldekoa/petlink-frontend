@@ -48,8 +48,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
       animalEnergy: "Amigable",
       animalImg:
         "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
+      
     },
     {
       id: "2",
@@ -59,8 +58,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
       animalEnergy: "Tranquila",
       animalImg:
         "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
+     
     },
     {
       id: "3",
@@ -70,8 +68,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
       animalEnergy: "Juguetona",
       animalImg:
         "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
+      
     },
     {
       id: "4",
@@ -81,8 +78,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
       animalEnergy: "Activo",
       animalImg:
         "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
+      
     },
   ],
   adoptados: [
@@ -94,8 +90,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
       animalEnergy: "Cariñosa",
       animalImg:
         "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80",
-      badge: "Adoptado",
-      badgeColor: "green",
+     
     },
     {
       id: "6",
@@ -105,8 +100,7 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
       animalEnergy: "Tranquilo",
       animalImg:
         "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80",
-      badge: "Adoptado",
-      badgeColor: "green",
+      
     },
   ],
   favoritos: [

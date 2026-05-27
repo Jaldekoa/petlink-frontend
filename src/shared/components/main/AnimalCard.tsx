@@ -104,11 +104,6 @@ export default function AnimalCard({
             </span>
           </div>
         </div>
-
-        <button className="absolute bottom-6 right-6 bg-tertiary-container text-on-tertiary-container w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-          <span className="material-symbols-outlined">favorite</span>
-          {isFavorite}
-        </button>
       </div>
     </article>
   );
