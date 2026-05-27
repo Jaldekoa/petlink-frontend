@@ -355,16 +355,16 @@ function buildAnimalItem({
 }): AnimalGridItem {
   return {
     id,
-    animalName: animal?.name ?? fallbackName,
-    animalAge: getAnimalAge(animal?.birthDate),
-    animalLocation: getAnimalLocation(animal),
-    animalEnergy:
+    name: animal?.name ?? fallbackName,
+    featureOne: getAnimalAge(animal?.birthDate),
+    location: getAnimalLocation(animal),
+    featureTwo:
       animal?.energyLevel ??
       animal?.breed ??
       fallbackBreed ??
       animal?.species ??
       fallbackSpecies,
-    animalImg: getAnimalImage(animal?.images ?? fallbackImages),
+    img: getAnimalImage(animal?.images ?? fallbackImages),
     isFavorite,
     badge,
     badgeColor,

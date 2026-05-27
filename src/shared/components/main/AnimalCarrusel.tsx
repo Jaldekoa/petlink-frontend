@@ -7,6 +7,9 @@ interface AnimalCarruselProps {
   viewAllHref?: string;
   animals: Animal[];
   loading?: boolean;
+  favoriteIds?: Set<string>;
+  pendingFavoriteId?: string | null;
+  onFavoriteToggle?: (id: string) => void;
 }
 
 function getAge(birthDate: string | null): string {
@@ -32,6 +35,9 @@ export default function AnimalCarrusel({
   viewAllHref = "/animals",
   animals,
   loading = false,
+  favoriteIds = new Set(),
+  pendingFavoriteId,
+  onFavoriteToggle,
 }: AnimalCarruselProps) {
   const navigate = useNavigate();
 
@@ -72,8 +78,11 @@ export default function AnimalCarrusel({
                 }
                 featureOne={getAge(animal.birthDate)}
                 featureTwo={animal.breed ?? animal.species}
+                isFavorite={favoriteIds.has(String(animal.id))}
                 badge={animal.status === "reserved" ? "Reservado" : undefined}
                 badgeColor="orange"
+                onFavoriteToggle={() => onFavoriteToggle?.(String(animal.id))}
+                favoriteDisabled={pendingFavoriteId === String(animal.id)}
                 onOpen={() => navigate(`/animals/${animal.id}`)}
               />
             </div>

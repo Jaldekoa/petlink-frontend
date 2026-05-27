@@ -9,6 +9,8 @@ export interface AnimalGridItem {
   featureTwo: string;
   img: string;
   isFavorite?: boolean;
+  badge?: string;
+  badgeColor?: "orange" | "green" | "blue";
 }
 
 interface AnimalGridProps {
@@ -74,6 +76,8 @@ export default function AnimalGrid({
               featureOne={animal.featureOne}
               featureTwo={animal.featureTwo}
               isFavorite={animal.isFavorite}
+              badge={animal.badge}
+              badgeColor={animal.badgeColor}
               onFavoriteToggle={() => onFavoriteToggle?.(animal.id)}
               favoriteDisabled={pendingFavoriteId === animal.id}
               onOpen={() => navigate(`/animals/${animal.id}`)}
