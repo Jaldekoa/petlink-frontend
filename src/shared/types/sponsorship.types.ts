@@ -1,10 +1,10 @@
 import type { PaginationParams } from "./pagination.type"
 
-export type SponsorshipStatus = 'activo' | 'cancelado' | 'pausado'
+export type SponsorshipStatus = 'pendiente' | 'activo' | 'cancelado' | 'pausado'
 
 export interface Sponsorship {
     id: string
-    monthlyAmount: number
+    monthlyAmount: number | null
     status: SponsorshipStatus | null
     startDate: string | null
     endDate: string | null
@@ -28,12 +28,12 @@ export interface Sponsorship {
 
 export interface CreateSponsorshipDTO {
     animalId: string
-    monthlyAmount: number
+    monthlyAmount?: number | null
 }
 
 export interface UpdateSponsorshipDTO {
     status?: SponsorshipStatus
-    monthlyAmount?: number
+    monthlyAmount?: number | null
     endDate?: string
 }
 

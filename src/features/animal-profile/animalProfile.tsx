@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getAnimalById } from "@/services/animal.service";
+import { createAdoption } from "@/services/adoption.service";
 import { getMyLikes, toggleLike } from "@/services/like.service";
+import { createSponsorship } from "@/services/sponsorship.service";
 import { getCurrentUserId } from "@/services/auth.service";
 import { useSocket } from "@/shared/hooks/useSocket";
 import type { Animal, AnimalImage } from "@/shared/types/animal.types";
@@ -89,7 +91,7 @@ export default function AnimalProfile() {
     }
   };
 
-  const handleAnimalRequest = (type: AnimalRequestType) => {
+  const handleAnimalRequest = async (type: AnimalRequestType) => {
     if (!animalId || requestLoading) return;
 
     const userId = getCurrentUserId();
@@ -100,6 +102,23 @@ export default function AnimalProfile() {
 
     setRequestError("");
     setRequestLoading(type);
+
+    try {
+      if (type === "adoption") {
+        await createAdoption({
+          animalId,
+          message: `Solicitud de adopción para ${animal?.name ?? "este animal"}`,
+        });
+      } else {
+        await createSponsorship({ animalId });
+      }
+    } catch (err) {
+      setRequestError(
+        err instanceof Error ? err.message : "No se pudo crear la solicitud",
+      );
+      setRequestLoading(null);
+      return;
+    }
 
     const socket = connect(userId);
     if (!socket) {

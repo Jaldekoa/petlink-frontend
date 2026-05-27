@@ -291,8 +291,8 @@ function mapAdoptionToAnimalItem(
     fallbackBreed: adoption.animal.breed,
     animal: animalById.get(id),
     isFavorite: favoriteIds.has(id),
-    badge: adoption.status ?? "Adopción",
-    badgeColor: adoption.status === "completado" ? "green" : "blue",
+    badge: getAdoptionBadge(adoption.status),
+    badgeColor: adoption.status === "completado" ? "green" : "orange",
   });
 }
 
@@ -309,7 +309,7 @@ function mapSponsorshipToAnimalItem(
     fallbackBreed: sponsorship.animal.breed,
     animal: animalById.get(id),
     isFavorite: favoriteIds.has(id),
-    badge: sponsorship.status ?? "Apadrinado",
+    badge: getSponsorshipBadge(sponsorship.status),
     badgeColor: sponsorship.status === "activo" ? "green" : "orange",
   });
 }
@@ -377,6 +377,22 @@ function getAnimalImage(images: Pick<AnimalImage, "imageUrl" | "isMain">[]) {
     images[0]?.imageUrl ??
     "/refe.webp"
   );
+}
+
+function getAdoptionBadge(status: Adoption["status"]) {
+  if (status === "pendiente") return "Pendiente";
+  if (status === "completado") return "Adoptado";
+  if (status === "aprovado") return "Aprobado";
+  if (status === "rechazado") return "Rechazado";
+  return "Adopción";
+}
+
+function getSponsorshipBadge(status: Sponsorship["status"]) {
+  if (status === "pendiente") return "Pendiente";
+  if (status === "activo") return "Apadrinado";
+  if (status === "pausado") return "Pausado";
+  if (status === "cancelado") return "Cancelado";
+  return "Apadrinamiento";
 }
 
 function getAnimalLocation(animal?: Animal) {
