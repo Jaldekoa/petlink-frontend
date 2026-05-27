@@ -1,4 +1,4 @@
-import AnimalCard from "@/shared/components/main/AnimalCard";
+import AnimalCard from "@shared/components/main/AnimalCard";
 
 export interface AnimalGridItem {
   id: string;
