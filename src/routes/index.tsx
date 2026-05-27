@@ -1,12 +1,21 @@
 import { createBrowserRouter, redirect } from "react-router";
 import Home from "@features/home/home";
-import Animals from "@features/animals/Animals";
+import Animals from "@features/animals/animals";
 import Search from "@features/search/search";
 import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
 import MainLayout from "@shared/layout/Layout";
+
 import AnimalProfile from "@/features/animal-profile/animalProfile";
 
+// === Dashboard ===
+import DashboardLayout from "@shared/layout/DashboardLayout";
+import DashboardHome from "@/features/shelter-dashboard/DashboardHome";
+import SheltersManagement from "@/features/shelter-dashboard/shelters/SheltersManagement";
+import AnimalsManagement from "@/features/shelter-dashboard/animals/animal";
+import UsersManagement from "@/features/shelter-dashboard/users/users";
+import RequestsManagement from "@/features/shelter-dashboard/requests/request";
+import SponsorshipsManagement from "@/features/shelter-dashboard/sponsorships/sponsorship";
 export async function mainLoader() {
   const isAuthenticated = true;
 
@@ -52,6 +61,21 @@ const router = createBrowserRouter([
     children: [{ index: true, element: <AnimalProfile /> }],
     loader: mainLoader,
   },
+
+{
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    loader: mainLoader,
+    children: [
+      { index: true, element: <DashboardHome /> },
+      { path: "shelters", element: <SheltersManagement /> },
+      { path: "animals", element: <AnimalsManagement /> },
+      { path: "users", element: <UsersManagement /> },
+      { path: "requests", element: <RequestsManagement /> },
+      { path: "sponsorships", element: <SponsorshipsManagement /> },
+    ],
+  },
+
 ]);
 
 export default router;
