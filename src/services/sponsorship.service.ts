@@ -17,7 +17,7 @@ export const getMySponsorships = (filters?: SponsorshipFilters) => {
 };
 
 export const createSponsorship = (data: CreateSponsorshipDTO) =>
-  apiClient.post<Sponsorship>("/sponsorships", data);
+  apiClient.post<Sponsorship>("/sponsorship", data);
 
 export const cancelSponsorship = (id: string) =>
   apiClient.patch<Sponsorship>(`/sponsorship/me/${id}/cancel`);

@@ -63,7 +63,7 @@ export default function Hero() {
             </span>
           </Link>
           <Link
-            to="/login"
+            to="/dashboard"
             className="flex items-center gap-2 px-6 py-3.5 rounded-full font-label-md text-white border border-white/30 hover:bg-white/10 active:scale-95 transition-all"
           >
             Soy una protectora
