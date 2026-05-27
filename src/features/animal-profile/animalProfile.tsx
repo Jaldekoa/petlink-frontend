@@ -2,17 +2,26 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getAnimalById } from "@/services/animal.service";
 import { getMyLikes, toggleLike } from "@/services/like.service";
+import { getCurrentUserId } from "@/services/auth.service";
+import { useSocket } from "@/shared/hooks/useSocket";
 import type { Animal, AnimalImage } from "@/shared/types/animal.types";
+
+type AnimalRequestType = "adoption" | "sponsorship";
+type AnimalRequestAck = { ok: true } | { ok: false; error?: string };
 
 export default function AnimalProfile() {
   const { animalId } = useParams();
   const navigate = useNavigate();
+  const { connect } = useSocket();
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [favoriteError, setFavoriteError] = useState("");
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [requestError, setRequestError] = useState("");
+  const [requestLoading, setRequestLoading] =
+    useState<AnimalRequestType | null>(null);
 
   useEffect(() => {
     let ignore = false;
@@ -80,6 +89,43 @@ export default function AnimalProfile() {
     }
   };
 
+  const handleAnimalRequest = (type: AnimalRequestType) => {
+    if (!animalId || requestLoading) return;
+
+    const userId = getCurrentUserId();
+    if (!userId) {
+      setRequestError("Necesitas iniciar sesión para enviar la solicitud");
+      return;
+    }
+
+    setRequestError("");
+    setRequestLoading(type);
+
+    const socket = connect(userId);
+    if (!socket) {
+      setRequestError("No se pudo conectar con las notificaciones");
+      setRequestLoading(null);
+      return;
+    }
+
+    socket.timeout(5000).emit(
+      "animal_request",
+      { type, animalId },
+      (err: Error | null, response?: AnimalRequestAck) => {
+        setRequestLoading(null);
+
+        if (err) {
+          setRequestError("No se pudo enviar la solicitud");
+          return;
+        }
+
+        if (!response?.ok) {
+          setRequestError(response?.error ?? "No se pudo enviar la solicitud");
+        }
+      },
+    );
+  };
+
   if (loading) {
     return <StatusMessage icon="progress_activity" title="Cargando animal..." />;
   }
@@ -144,6 +190,12 @@ export default function AnimalProfile() {
       {favoriteError && (
         <div className="mx-margin-mobile mb-4 rounded-2xl border border-error/20 bg-error/10 px-4 py-3 text-error font-body-sm text-body-sm">
           {favoriteError}
+        </div>
+      )}
+
+      {requestError && (
+        <div className="mx-margin-mobile mb-4 rounded-2xl border border-error/20 bg-error/10 px-4 py-3 text-error font-body-sm text-body-sm">
+          {requestError}
         </div>
       )}
 
@@ -221,15 +273,27 @@ export default function AnimalProfile() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-stack-lg">
-          <button className="flex-1 bg-on-tertiary-container hover:bg-tertiary-container text-white py-4 px-8 rounded-full font-headline-md flex items-center justify-center gap-3 transition-all active:scale-95 shadow-lg shadow-on-tertiary-container/20">
+          <button
+            className="flex-1 bg-on-tertiary-container hover:bg-tertiary-container text-white py-4 px-8 rounded-full font-headline-md flex items-center justify-center gap-3 transition-all active:scale-95 shadow-lg shadow-on-tertiary-container/20 disabled:opacity-60 disabled:cursor-wait"
+            onClick={() => handleAnimalRequest("adoption")}
+            disabled={requestLoading !== null}
+            aria-disabled={requestLoading !== null}
+          >
             <span className="material-symbols-outlined">favorite</span>
-            Adoptar a {animal.name}
+            {requestLoading === "adoption"
+              ? "Enviando..."
+              : `Adoptar a ${animal.name}`}
           </button>
-          <button className="flex-1 bg-white border-2 border-secondary text-secondary py-4 px-8 rounded-full font-headline-md flex items-center justify-center gap-3 transition-all hover:bg-secondary-container/20 active:scale-95">
+          <button
+            className="flex-1 bg-white border-2 border-secondary text-secondary py-4 px-8 rounded-full font-headline-md flex items-center justify-center gap-3 transition-all hover:bg-secondary-container/20 active:scale-95 disabled:opacity-60 disabled:cursor-wait"
+            onClick={() => handleAnimalRequest("sponsorship")}
+            disabled={requestLoading !== null}
+            aria-disabled={requestLoading !== null}
+          >
             <span className="material-symbols-outlined">
               volunteer_activism
             </span>
-            Apadrinar
+            {requestLoading === "sponsorship" ? "Enviando..." : "Apadrinar"}
           </button>
         </div>
       </div>
