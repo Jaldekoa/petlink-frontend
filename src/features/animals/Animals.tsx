@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { authUser } from "@services/auth.services";
 import AnimalList, { type AnimalGridItem } from "@/shared/components/main/AnimalList";
-import AuthGate from "./AuthGate";
+import AuthGate from "@/features/auth/AuthGate";
 
 type AnimalTab = "apadrinados" | "adoptados" | "favoritos";
 
@@ -109,7 +109,7 @@ export default function MyAnimals() {
 
         {/* ── TAB NAVIGATION ───────────────────────────────────────────────── */}
         <nav className="max-w-6xl mx-auto mt-6">
-          <div className="flex justify-center gap-3 md:justify-start md:gap-4">
+          <div className="flex  gap-3 md:justify-around md:gap-4">
             {TABS.map(({ key, label, icon: tabIcon }) => {
               const isActive = activeTab === key;
               const count = animals[key].length;

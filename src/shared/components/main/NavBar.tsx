@@ -17,8 +17,7 @@ export default function NavBar() {
             key={to}
             to={to}
             end={to === "/"}
-            className="flex flex-col items-center gap-0.5 flex-1 group"
-          >
+            className="flex flex-col items-center gap-0.5 flex-1 group">
             {({ isActive }) => (
               <>
                 {/* Pill indicator + icon */}
