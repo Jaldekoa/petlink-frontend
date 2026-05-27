@@ -8,13 +8,9 @@ interface AnimalCardProps {
   badge?: string;
   badgeColor?: "orange" | "green" | "blue";
   onFavoriteToggle?: () => void;
+  favoriteDisabled?: boolean;
+  onOpen?: () => void;
 }
-
-/* const BADGE_STYLES: Record<string, string> = {
-  orange: "bg-warm-orange/15 text-warm-orange border-warm-orange/30",
-  green:  "bg-green-500/15 text-green-700 border-green-500/30",
-  blue:   "bg-blue-500/15 text-blue-700 border-blue-500/30",
-}; */
 
 export default function AnimalCard({
   img,
@@ -23,12 +19,32 @@ export default function AnimalCard({
   featureOne,
   featureTwo,
   isFavorite = false,
-  /* badge,
-  badgeColor = "orange", */
+  badge,
+  badgeColor = "blue",
   onFavoriteToggle,
+  favoriteDisabled = false,
+  onOpen,
 }: AnimalCardProps) {
+  const badgeColorClass = {
+    orange: "bg-warm-orange text-white",
+    green: "bg-green-600 text-white",
+    blue: "bg-primary text-on-primary",
+  }[badgeColor];
+
   return (
-    <article className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300">
+    <article
+      role={onOpen ? "button" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        if (!onOpen) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+      className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+    >
       <div
         className="
           h-full overflow-hidden rounded-3xl
@@ -47,29 +63,35 @@ export default function AnimalCard({
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
 
-          {/* Badge (Apadrinado / Adoptado) */}
-          {/* {badge && (
-            <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full border text-[11px] font-semibold tracking-wide ${BADGE_STYLES[badgeColor]}`}>
+          {badge && (
+            <span
+              className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${badgeColorClass}`}
+            >
               {badge}
-            </div>
-          )} */}
+            </span>
+          )}
 
           {/* Favorite button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
+              if (favoriteDisabled) return;
               onFavoriteToggle?.();
             }}
+            disabled={favoriteDisabled}
+            aria-disabled={favoriteDisabled}
             aria-label={
               isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"
             }
-            className="
+            className={`
               absolute bottom-4 right-4
               flex items-center justify-center w-11 h-11
               rounded-full backdrop-blur-md bg-black/30
               hover:bg-black/40 active:scale-90
               transition-all duration-200
-            ">
+              ${favoriteDisabled ? "opacity-60 cursor-wait" : ""}
+            `}
+          >
             <span
               className="material-symbols-outlined text-[22px]"
               style={{

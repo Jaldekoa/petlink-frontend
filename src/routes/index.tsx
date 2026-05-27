@@ -6,6 +6,7 @@ import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
 import MainLayout from "@shared/layout/Layout";
 import AuthGate from "@/features/auth/AuthGate";
+import AnimalProfile from "@/features/animal-profile/animalProfile";
 
 import { isAuthenticated } from "@services/auth.service";
 
@@ -29,6 +30,12 @@ const router = createBrowserRouter([
     path: "/animals",
     element: <MainLayout />,
     children: [{ index: true, element: <Animals /> }],
+    loader: mainLoader,
+  },
+  {
+    path: "/animals/:animalId",
+    element: <MainLayout />,
+    children: [{ index: true, element: <AnimalProfile /> }],
     loader: mainLoader,
   },
   {
