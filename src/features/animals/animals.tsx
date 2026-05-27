@@ -42,41 +42,41 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   apadrinados: [
     {
       id: "1",
-      animalName: "Mochi",
-      animalAge: "2 años",
-      animalLocation: "Madrid",
-      animalEnergy: "Amigable",
-      animalImg:
+      name: "Mochi",
+      featureOne: "2 años",
+      location: "Madrid",
+      featureTwo: "Amigable",
+      img:
         "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
       
     },
     {
       id: "2",
-      animalName: "Luna",
-      animalAge: "1 año",
-      animalLocation: "Barcelona",
-      animalEnergy: "Tranquila",
-      animalImg:
+      name: "Luna",
+      featureOne: "1 año",
+      location: "Barcelona",
+      featureTwo: "Tranquila",
+      img:
         "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80",
      
     },
     {
       id: "3",
-      animalName: "Kira",
-      animalAge: "3 años",
-      animalLocation: "Valencia",
-      animalEnergy: "Juguetona",
-      animalImg:
+      name: "Kira",
+      featureOne: "3 años",
+      location: "Valencia",
+      featureTwo: "Juguetona",
+      img:
         "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
       
     },
     {
       id: "4",
-      animalName: "Max",
-      animalAge: "5 años",
-      animalLocation: "Sevilla",
-      animalEnergy: "Activo",
-      animalImg:
+      name: "Max",
+      featureOne: "5 años",
+      location: "Sevilla",
+      featureTwo: "Activo",
+      img:
         "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80",
       
     },
@@ -84,21 +84,21 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   adoptados: [
     {
       id: "5",
-      animalName: "Nala",
-      animalAge: "4 años",
-      animalLocation: "Bilbao",
-      animalEnergy: "Cariñosa",
-      animalImg:
+      name: "Nala",
+      featureOne: "4 años",
+      location: "Bilbao",
+      featureTwo: "Cariñosa",
+      img:
         "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80",
      
     },
     {
       id: "6",
-      animalName: "Bruno",
-      animalAge: "6 años",
-      animalLocation: "Zaragoza",
-      animalEnergy: "Tranquilo",
-      animalImg:
+      name: "Bruno",
+      featureOne: "6 años",
+      location: "Zaragoza",
+      featureTwo: "Tranquilo",
+      img:
         "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80",
       
     },
@@ -106,51 +106,51 @@ const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   favoritos: [
     {
       id: "7",
-      animalName: "Cleo",
-      animalAge: "2 años",
-      animalLocation: "Málaga",
-      animalEnergy: "Juguetona",
-      animalImg:
+      name: "Cleo",
+      featureOne: "2 años",
+      location: "Málaga",
+      featureTwo: "Juguetona",
+      img:
         "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80",
       isFavorite: true,
     },
     {
       id: "8",
-      animalName: "Rex",
-      animalAge: "3 años",
-      animalLocation: "Murcia",
-      animalEnergy: "Activo",
-      animalImg:
+      name: "Rex",
+      featureOne: "3 años",
+      location: "Murcia",
+      featureTwo: "Activo",
+      img:
         "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80",
       isFavorite: true,
     },
     {
       id: "9",
-      animalName: "Simba",
-      animalAge: "1 año",
-      animalLocation: "Granada",
-      animalEnergy: "Cariñoso",
-      animalImg:
+      name: "Simba",
+      featureOne: "1 año",
+      location: "Granada",
+      featureTwo: "Cariñoso",
+      img:
         "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80",
       isFavorite: true,
     },
     {
       id: "10",
-      animalName: "Coco",
-      animalAge: "7 años",
-      animalLocation: "Córdoba",
-      animalEnergy: "Tranquila",
-      animalImg:
+      name: "Coco",
+      featureOne: "7 años",
+      location: "Córdoba",
+      featureTwo: "Tranquila",
+      img:
         "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80",
       isFavorite: true,
     },
     {
       id: "11",
-      animalName: "Oli",
-      animalAge: "5 años",
-      animalLocation: "Alicante",
-      animalEnergy: "Independiente",
-      animalImg:
+      name: "Oli",
+      featureOne: "5 años",
+      location: "Alicante",
+      featureTwo: "Independiente",
+      img:
         "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80",
       isFavorite: true,
     },
@@ -190,7 +190,7 @@ export default function MyAnimals() {
 
           {/* ── TAB NAVIGATION ───────────────────────────────────────────────── */}
           <nav className="max-w-6xl mx-auto mt-6">
-            <div className="flex justify-center gap-3 md:justify-start md:gap-4">
+            <div className="flex gap-3 md:justify-around md:gap-4">
               {TABS.map(({ key, label, icon: tabIcon }) => {
                 const isActive = activeTab === key;
                 const count = animals[key].length;

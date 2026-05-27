@@ -2,14 +2,12 @@ import AnimalCard from "@/shared/components/main/AnimalCard";
 
 export interface AnimalGridItem {
   id: string;
-  animalName: string;
-  animalAge: string;
-  animalLocation: string;
-  animalEnergy: string;
-  animalImg: string;
+  name: string;
+  featureOne: string;
+  location: string;
+  featureTwo: string;
+  img: string;
   isFavorite?: boolean;
-  badge?: string;
-  badgeColor?: "orange" | "green" | "blue";
 }
 
 interface AnimalGridProps {
@@ -64,14 +62,12 @@ export default function AnimalGrid({
         {animals.map((animal) => (
           <div key={animal.id} className="w-full flex justify-center [&>article]:w-full">
             <AnimalCard
-              animalImg={animal.animalImg}
-              animalName={animal.animalName}
-              animalLocation={animal.animalLocation}
-              animalAge={animal.animalAge}
-              animalEnergy={animal.animalEnergy}
+              img={animal.img}
+              name={animal.name}
+              location={animal.location}
+              featureOne={animal.featureOne}
+              featureTwo={animal.featureTwo}
               isFavorite={animal.isFavorite}
-              badge={animal.badge}
-              badgeColor={animal.badgeColor}
               onFavoriteToggle={() => onFavoriteToggle?.(animal.id)}
             />
           </div>

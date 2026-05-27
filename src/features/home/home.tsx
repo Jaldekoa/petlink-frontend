@@ -1,6 +1,6 @@
-import Hero from "@shared/components/main/Hero";
-import Stats from "@shared/components/main/Stats";
-import Adoptions from "@shared/components/main/Adoptions";
+import Adoptions from "@features/home/components/Adoptions";
+import Hero from "@features/home/components/Hero";
+import Stats from "@features/home/components/Stats";
 
 function Home() {
   return (
