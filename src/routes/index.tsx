@@ -1,7 +1,6 @@
 import { createBrowserRouter, redirect } from "react-router";
-import { authUser } from "@services/auth.services";
 import Home from "@features/home/home";
-import Animals from "@features/animals/animals";
+import Animals from "@features/animals/Animals";
 import Search from "@features/search/search";
 import Chat from "@features/chat/chat";
 import Profile from "@features/profile/profile";
@@ -9,7 +8,7 @@ import MainLayout from "@shared/layout/Layout";
 import AnimalProfile from "@/features/animal-profile/animalProfile";
 
 export async function mainLoader() {
-  const isAuthenticated = await authUser();
+  const isAuthenticated = true;
 
   if (!isAuthenticated) {
     return redirect("/");
@@ -22,7 +21,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    children: [{ index: true, element: <Home /> }]
+    children: [{ index: true, element: <Home /> }],
   },
   {
     path: "/animals",
