@@ -7,6 +7,9 @@ import Profile from "@features/profile/profile";
 import MainLayout from "@shared/layout/Layout";
 
 import AnimalProfile from "@/features/animal-profile/animalProfile";
+import AuthGate from "@/features/auth/AuthGate";
+
+import { isAuthenticated } from "@services/auth.service";
 
 // === Dashboard ===
 import DashboardLayout from "@shared/layout/DashboardLayout";
@@ -17,13 +20,13 @@ import UsersManagement from "@/features/shelter-dashboard/users/users";
 import RequestsManagement from "@/features/shelter-dashboard/requests/request";
 import SponsorshipsManagement from "@/features/shelter-dashboard/sponsorships/sponsorship";
 export async function mainLoader() {
-  const isAuthenticated = true;
+  const hasAccess = isAuthenticated();
 
-  if (!isAuthenticated) {
-    return redirect("/");
+  if (!hasAccess) {
+    return redirect("/login");
   }
 
-  return isAuthenticated;
+  return hasAccess;
 }
 
 const router = createBrowserRouter([
@@ -55,11 +58,11 @@ const router = createBrowserRouter([
     children: [{ index: true, element: <Profile /> }],
     loader: mainLoader,
   },
+
   {
-    path: "/animal-profile",
+    path: "/login",
     element: <MainLayout />,
-    children: [{ index: true, element: <AnimalProfile /> }],
-    loader: mainLoader,
+    children: [{ index: true, element: <AuthGate /> }],
   },
 
 {
