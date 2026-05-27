@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { authUser } from "@services/auth.services";
+import { authUser } from "@/services/auth.service";
 import AnimalList, { type AnimalGridItem } from "@/shared/components/main/AnimalList";
 import AuthGate from "./AuthGate";
 
@@ -13,8 +13,8 @@ interface TabConfig {
 
 const TABS: TabConfig[] = [
   { key: "apadrinados", label: "Apadrinados", icon: "volunteer_activism" },
-  { key: "adoptados",   label: "Adoptados",   icon: "home"              },
-  { key: "favoritos",   label: "Favoritos",   icon: "favorite"          },
+  { key: "adoptados", label: "Adoptados", icon: "home" },
+  { key: "favoritos", label: "Favoritos", icon: "favorite" },
 ];
 
 const EMPTY_STATES: Record<AnimalTab, { icon: string; title: string; subtitle: string }> = {
@@ -37,21 +37,21 @@ const EMPTY_STATES: Record<AnimalTab, { icon: string; title: string; subtitle: s
 
 const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
   apadrinados: [
-    { id: "1", animalName: "Mochi", animalAge: "2 años", animalLocation: "Madrid",    animalEnergy: "Amigable",  animalImg: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
-    { id: "2", animalName: "Luna",  animalAge: "1 año",  animalLocation: "Barcelona", animalEnergy: "Tranquila", animalImg: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
-    { id: "3", animalName: "Kira",  animalAge: "3 años", animalLocation: "Valencia",  animalEnergy: "Juguetona", animalImg: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
-    { id: "4", animalName: "Max",   animalAge: "5 años", animalLocation: "Sevilla",   animalEnergy: "Activo",    animalImg: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "1", animalName: "Mochi", animalAge: "2 años", animalLocation: "Madrid", animalEnergy: "Amigable", animalImg: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "2", animalName: "Luna", animalAge: "1 año", animalLocation: "Barcelona", animalEnergy: "Tranquila", animalImg: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "3", animalName: "Kira", animalAge: "3 años", animalLocation: "Valencia", animalEnergy: "Juguetona", animalImg: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
+    { id: "4", animalName: "Max", animalAge: "5 años", animalLocation: "Sevilla", animalEnergy: "Activo", animalImg: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80", badge: "Apadrinado", badgeColor: "orange" },
   ],
   adoptados: [
-    { id: "5", animalName: "Nala",  animalAge: "4 años", animalLocation: "Bilbao",   animalEnergy: "Cariñosa", animalImg: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80", badge: "Adoptado", badgeColor: "green" },
+    { id: "5", animalName: "Nala", animalAge: "4 años", animalLocation: "Bilbao", animalEnergy: "Cariñosa", animalImg: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80", badge: "Adoptado", badgeColor: "green" },
     { id: "6", animalName: "Bruno", animalAge: "6 años", animalLocation: "Zaragoza", animalEnergy: "Tranquilo", animalImg: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80", badge: "Adoptado", badgeColor: "green" },
   ],
   favoritos: [
-    { id: "7",  animalName: "Cleo",  animalAge: "2 años", animalLocation: "Málaga",   animalEnergy: "Juguetona",    animalImg: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80", isFavorite: true },
-    { id: "8",  animalName: "Rex",   animalAge: "3 años", animalLocation: "Murcia",   animalEnergy: "Activo",       animalImg: "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80", isFavorite: true },
-    { id: "9",  animalName: "Simba", animalAge: "1 año",  animalLocation: "Granada",  animalEnergy: "Cariñoso",     animalImg: "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80", isFavorite: true },
-    { id: "10", animalName: "Coco",  animalAge: "7 años", animalLocation: "Córdoba",  animalEnergy: "Tranquila",    animalImg: "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80", isFavorite: true },
-    { id: "11", animalName: "Oli",   animalAge: "5 años", animalLocation: "Alicante", animalEnergy: "Independiente",animalImg: "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80", isFavorite: true },
+    { id: "7", animalName: "Cleo", animalAge: "2 años", animalLocation: "Málaga", animalEnergy: "Juguetona", animalImg: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80", isFavorite: true },
+    { id: "8", animalName: "Rex", animalAge: "3 años", animalLocation: "Murcia", animalEnergy: "Activo", animalImg: "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80", isFavorite: true },
+    { id: "9", animalName: "Simba", animalAge: "1 año", animalLocation: "Granada", animalEnergy: "Cariñoso", animalImg: "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80", isFavorite: true },
+    { id: "10", animalName: "Coco", animalAge: "7 años", animalLocation: "Córdoba", animalEnergy: "Tranquila", animalImg: "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80", isFavorite: true },
+    { id: "11", animalName: "Oli", animalAge: "5 años", animalLocation: "Alicante", animalEnergy: "Independiente", animalImg: "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80", isFavorite: true },
   ],
 };
 
@@ -144,9 +144,8 @@ export default function MyAnimals() {
                     <span className={`font-headline-md text-body-md md:text-headline-md leading-none ${isActive ? "text-on-primary" : "text-primary"}`}>
                       {count}
                     </span>
-                    <span className={`font-label-sm text-[11px] md:text-label-sm text-center tracking-wide mt-1 uppercase ${
-                      isActive ? "text-on-primary/80" : "text-on-surface-variant"
-                    }`}>
+                    <span className={`font-label-sm text-[11px] md:text-label-sm text-center tracking-wide mt-1 uppercase ${isActive ? "text-on-primary/80" : "text-on-surface-variant"
+                      }`}>
                       {label}
                     </span>
                   </div>
