@@ -17,8 +17,16 @@ export default function AnimalCard({
   featureOne,
   featureTwo,
   isFavorite = false,
+  badge,
+  badgeColor = "blue",
   onFavoriteToggle,
 }: AnimalCardProps) {
+  const badgeColorClass = {
+    orange: "bg-warm-orange text-white",
+    green: "bg-green-600 text-white",
+    blue: "bg-primary text-on-primary",
+  }[badgeColor];
+
   return (
     <article className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300">
       <div
@@ -38,6 +46,14 @@ export default function AnimalCard({
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+
+          {badge && (
+            <span
+              className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${badgeColorClass}`}
+            >
+              {badge}
+            </span>
+          )}
 
           {/* Favorite button */}
           <button

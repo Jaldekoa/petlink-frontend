@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AnimalList, {
   type AnimalGridItem,
 } from "@/shared/components/main/AnimalList";
+import { getAnimalById } from "@/services/animal.service";
+import { getMyAdoptions } from "@/services/adoption.service";
+import { getMyLikes, toggleLike } from "@/services/like.service";
+import { getMySponsorships } from "@/services/sponsorship.service";
+import type { Adoption } from "@/shared/types/adoption.types";
+import type { Animal, AnimalImage } from "@/shared/types/animal.types";
+import type { Like } from "@/shared/types/like.types";
+import type { Sponsorship } from "@/shared/types/sponsorship.types";
 
 type AnimalTab = "apadrinados" | "adoptados" | "favoritos";
 
@@ -38,146 +46,114 @@ const EMPTY_STATES: Record<
   },
 };
 
-const MOCK_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
-  apadrinados: [
-    {
-      id: "1",
-      animalName: "Mochi",
-      animalAge: "2 años",
-      animalLocation: "Madrid",
-      animalEnergy: "Amigable",
-      animalImg:
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
-    },
-    {
-      id: "2",
-      animalName: "Luna",
-      animalAge: "1 año",
-      animalLocation: "Barcelona",
-      animalEnergy: "Tranquila",
-      animalImg:
-        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
-    },
-    {
-      id: "3",
-      animalName: "Kira",
-      animalAge: "3 años",
-      animalLocation: "Valencia",
-      animalEnergy: "Juguetona",
-      animalImg:
-        "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
-    },
-    {
-      id: "4",
-      animalName: "Max",
-      animalAge: "5 años",
-      animalLocation: "Sevilla",
-      animalEnergy: "Activo",
-      animalImg:
-        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80",
-      badge: "Apadrinado",
-      badgeColor: "orange",
-    },
-  ],
-  adoptados: [
-    {
-      id: "5",
-      animalName: "Nala",
-      animalAge: "4 años",
-      animalLocation: "Bilbao",
-      animalEnergy: "Cariñosa",
-      animalImg:
-        "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&q=80",
-      badge: "Adoptado",
-      badgeColor: "green",
-    },
-    {
-      id: "6",
-      animalName: "Bruno",
-      animalAge: "6 años",
-      animalLocation: "Zaragoza",
-      animalEnergy: "Tranquilo",
-      animalImg:
-        "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&q=80",
-      badge: "Adoptado",
-      badgeColor: "green",
-    },
-  ],
-  favoritos: [
-    {
-      id: "7",
-      animalName: "Cleo",
-      animalAge: "2 años",
-      animalLocation: "Málaga",
-      animalEnergy: "Juguetona",
-      animalImg:
-        "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80",
-      isFavorite: true,
-    },
-    {
-      id: "8",
-      animalName: "Rex",
-      animalAge: "3 años",
-      animalLocation: "Murcia",
-      animalEnergy: "Activo",
-      animalImg:
-        "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=400&q=80",
-      isFavorite: true,
-    },
-    {
-      id: "9",
-      animalName: "Simba",
-      animalAge: "1 año",
-      animalLocation: "Granada",
-      animalEnergy: "Cariñoso",
-      animalImg:
-        "https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=400&q=80",
-      isFavorite: true,
-    },
-    {
-      id: "10",
-      animalName: "Coco",
-      animalAge: "7 años",
-      animalLocation: "Córdoba",
-      animalEnergy: "Tranquila",
-      animalImg:
-        "https://images.unsplash.com/photo-1611003228941-98852ba62227?w=400&q=80",
-      isFavorite: true,
-    },
-    {
-      id: "11",
-      animalName: "Oli",
-      animalAge: "5 años",
-      animalLocation: "Alicante",
-      animalEnergy: "Independiente",
-      animalImg:
-        "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&q=80",
-      isFavorite: true,
-    },
-  ],
+const EMPTY_ANIMALS: Record<AnimalTab, AnimalGridItem[]> = {
+  apadrinados: [],
+  adoptados: [],
+  favoritos: [],
 };
 
 export default function MyAnimals() {
   const [activeTab, setActiveTab] = useState<AnimalTab>("apadrinados");
-  const [animals, setAnimals] = useState(MOCK_ANIMALS);
+  const [animals, setAnimals] = useState(EMPTY_ANIMALS);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let ignore = false;
+
+    const loadAnimals = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const [adoptions, sponsorships, likes] = await Promise.all([
+          getMyAdoptions({ limit: 100 }),
+          getMySponsorships({ limit: 100 }),
+          getMyLikes(),
+        ]);
+
+        const animalIds = new Set<string>();
+
+        adoptions.data.forEach((adoption) =>
+          animalIds.add(String(adoption.animal.id)),
+        );
+        sponsorships.data.forEach((sponsorship) =>
+          animalIds.add(String(sponsorship.animal.id)),
+        );
+        likes.forEach((like) => animalIds.add(String(like.animal.id)));
+
+        const animalDetails = await Promise.all(
+          Array.from(animalIds).map(async (id) => getAnimalById(id)),
+        );
+        const animalById = new Map(
+          animalDetails.map((animal) => [String(animal.id), animal]),
+        );
+        const favoriteIds = new Set(
+          likes.map((like) => String(like.animal.id)),
+        );
+
+        if (ignore) return;
+
+        setAnimals({
+          apadrinados: sponsorships.data.map((sponsorship) =>
+            mapSponsorshipToAnimalItem(sponsorship, animalById, favoriteIds),
+          ),
+          adoptados: adoptions.data.map((adoption) =>
+            mapAdoptionToAnimalItem(adoption, animalById, favoriteIds),
+          ),
+          favoritos: likes.map((like) =>
+            mapLikeToAnimalItem(like, animalById),
+          ),
+        });
+      } catch (err) {
+        if (ignore) return;
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : "No se pudieron cargar tus animales",
+        );
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadAnimals();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // ── Authenticated view ────────────────────────────────────────────────────
   const currentAnimals = animals[activeTab];
   const { icon, title, subtitle } = EMPTY_STATES[activeTab];
 
-  const handleFavoriteToggle = (id: string) => {
-    setAnimals((prev) => ({
-      ...prev,
-      [activeTab]: prev[activeTab].map((a) =>
-        a.id === id ? { ...a, isFavorite: !a.isFavorite } : a,
-      ),
-    }));
+  const handleFavoriteToggle = async (id: string) => {
+    try {
+      const result = await toggleLike(id);
+
+      setAnimals((prev) => {
+        const updateFavoriteFlag = (item: AnimalGridItem) =>
+          item.id === id ? { ...item, isFavorite: result.liked } : item;
+
+        return {
+          apadrinados: prev.apadrinados.map(updateFavoriteFlag),
+          adoptados: prev.adoptados.map(updateFavoriteFlag),
+          favoritos: result.liked
+            ? prev.favoritos.map(updateFavoriteFlag)
+            : prev.favoritos.filter((item) => item.id !== id),
+        };
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "No se pudo actualizar el favorito",
+      );
+    }
   };
 
   return (
@@ -262,15 +238,181 @@ export default function MyAnimals() {
 
         {/* ── CONTENT ────────────────────────────────────────────────────────── */}
         <main className="max-w-6xl mx-auto px-6 py-8 md:px-12">
-          <AnimalList
-            animals={currentAnimals}
-            onFavoriteToggle={handleFavoriteToggle}
-            emptyIcon={icon}
-            emptyTitle={title}
-            emptySubtitle={subtitle}
-          />
+          {loading && <StatusMessage icon="progress_activity" title="Cargando tus animales..." />}
+
+          {!loading && error && (
+            <StatusMessage
+              icon="error"
+              title="No se pudieron cargar tus animales"
+              subtitle={error}
+            />
+          )}
+
+          {!loading && !error && (
+            <AnimalList
+              animals={currentAnimals}
+              onFavoriteToggle={handleFavoriteToggle}
+              emptyIcon={icon}
+              emptyTitle={title}
+              emptySubtitle={subtitle}
+            />
+          )}
         </main>
       </div>
     </main>
+  );
+}
+
+function mapAdoptionToAnimalItem(
+  adoption: Adoption,
+  animalById: Map<string, Animal>,
+  favoriteIds: Set<string>,
+): AnimalGridItem {
+  const id = String(adoption.animal.id);
+  return buildAnimalItem({
+    id,
+    fallbackName: adoption.animal.name,
+    fallbackSpecies: adoption.animal.species,
+    fallbackBreed: adoption.animal.breed,
+    animal: animalById.get(id),
+    isFavorite: favoriteIds.has(id),
+    badge: adoption.status ?? "Adopción",
+    badgeColor: adoption.status === "completado" ? "green" : "blue",
+  });
+}
+
+function mapSponsorshipToAnimalItem(
+  sponsorship: Sponsorship,
+  animalById: Map<string, Animal>,
+  favoriteIds: Set<string>,
+): AnimalGridItem {
+  const id = String(sponsorship.animal.id);
+  return buildAnimalItem({
+    id,
+    fallbackName: sponsorship.animal.name,
+    fallbackSpecies: sponsorship.animal.species,
+    fallbackBreed: sponsorship.animal.breed,
+    animal: animalById.get(id),
+    isFavorite: favoriteIds.has(id),
+    badge: sponsorship.status ?? "Apadrinado",
+    badgeColor: sponsorship.status === "activo" ? "green" : "orange",
+  });
+}
+
+function mapLikeToAnimalItem(
+  like: Like,
+  animalById: Map<string, Animal>,
+): AnimalGridItem {
+  const id = String(like.animal.id);
+  return buildAnimalItem({
+    id,
+    fallbackName: like.animal.name,
+    fallbackSpecies: like.animal.species,
+    fallbackBreed: like.animal.breed,
+    fallbackImages: like.animal.images,
+    animal: animalById.get(id),
+    isFavorite: true,
+    badge: "Favorito",
+    badgeColor: "orange",
+  });
+}
+
+function buildAnimalItem({
+  id,
+  fallbackName,
+  fallbackSpecies,
+  fallbackBreed,
+  fallbackImages = [],
+  animal,
+  isFavorite,
+  badge,
+  badgeColor,
+}: {
+  id: string;
+  fallbackName: string;
+  fallbackSpecies: string;
+  fallbackBreed: string | null;
+  fallbackImages?: Pick<AnimalImage, "imageUrl" | "isMain">[];
+  animal?: Animal;
+  isFavorite: boolean;
+  badge: string;
+  badgeColor: "orange" | "green" | "blue";
+}): AnimalGridItem {
+  return {
+    id,
+    animalName: animal?.name ?? fallbackName,
+    animalAge: getAnimalAge(animal?.birthDate),
+    animalLocation: getAnimalLocation(animal),
+    animalEnergy:
+      animal?.energyLevel ??
+      animal?.breed ??
+      fallbackBreed ??
+      animal?.species ??
+      fallbackSpecies,
+    animalImg: getAnimalImage(animal?.images ?? fallbackImages),
+    isFavorite,
+    badge,
+    badgeColor,
+  };
+}
+
+function getAnimalImage(images: Pick<AnimalImage, "imageUrl" | "isMain">[]) {
+  return (
+    images.find((image) => image.isMain)?.imageUrl ??
+    images[0]?.imageUrl ??
+    "/refe.webp"
+  );
+}
+
+function getAnimalLocation(animal?: Animal) {
+  return animal?.shelter.city ?? animal?.shelter.name ?? "Ubicación no disponible";
+}
+
+function getAnimalAge(birthDate?: string | null) {
+  if (!birthDate) return "Edad no disponible";
+
+  const birth = new Date(birthDate);
+  if (Number.isNaN(birth.getTime())) return "Edad no disponible";
+
+  const now = new Date();
+  let years = now.getFullYear() - birth.getFullYear();
+  const hasHadBirthday =
+    now.getMonth() > birth.getMonth() ||
+    (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate());
+
+  if (!hasHadBirthday) years -= 1;
+
+  if (years <= 0) return "Menos de 1 año";
+  return `${years} ${years === 1 ? "año" : "años"}`;
+}
+
+function StatusMessage({
+  icon,
+  title,
+  subtitle,
+}: {
+  icon: string;
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <section className="flex flex-col items-center justify-center px-6 py-20 text-center max-w-xl mx-auto">
+      <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
+        <span
+          className="material-symbols-outlined text-[40px] text-primary"
+          style={{ fontVariationSettings: "'FILL' 1" }}
+        >
+          {icon}
+        </span>
+      </div>
+      <h3 className="font-headline-md text-headline-md text-primary">
+        {title}
+      </h3>
+      {subtitle && (
+        <p className="mt-2 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+          {subtitle}
+        </p>
+      )}
+    </section>
   );
 }
