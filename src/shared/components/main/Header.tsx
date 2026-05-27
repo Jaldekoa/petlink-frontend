@@ -12,7 +12,7 @@ export default function Header({
       <div className="flex justify-between items-center px-margin-mobile py-base h-16 w-full max-w-7xl mx-auto">
         <div className="flex items-center">
           <img
-            src="./favicon.webp"
+            src="/favicon.webp"
             alt="logo de Petlink"
             className="h-8 w-8 object-contain"
           />
