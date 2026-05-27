@@ -2,7 +2,11 @@ import { useState, useCallback, useEffect } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export type NotificationType = "adoption" | "sponsorship" | "message" | "system";
+export type NotificationType =
+  | "adoption"
+  | "sponsorship"
+  | "message"
+  | "system";
 
 export interface Notification {
   id: string;
@@ -18,7 +22,7 @@ export interface Notification {
 const now = Date.now();
 const ago = (ms: number) => new Date(now - ms).toISOString();
 const min = 60_000;
-const hr  = 3_600_000;
+const hr = 3_600_000;
 const day = 86_400_000;
 
 const MOCK_NOTIFICATIONS: Notification[] = [
@@ -97,17 +101,18 @@ function saveToStorage(notifications: Notification[]): void {
 // ── Hook ─────────────────────────────────────────────────────────────────────
 
 export function useNotifications() {
-  const [notifications, setNotifications] = useState<Notification[]>(loadFromStorage);
+  const [notifications, setNotifications] =
+    useState<Notification[]>(loadFromStorage);
 
   useEffect(() => {
     saveToStorage(notifications);
   }, [notifications]);
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const notificationCount = notifications.filter((n) => !n.isRead).length;
 
   const markAsRead = useCallback((id: string) => {
     setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
     );
   }, []);
 
@@ -116,14 +121,23 @@ export function useNotifications() {
   }, []);
 
   // Simulate receiving a new notification from the backend (WebSocket event)
-  const pushNotification = useCallback((notif: Omit<Notification, "id" | "createdAt">) => {
-    const newNotif: Notification = {
-      ...notif,
-      id: `notif-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-    };
-    setNotifications((prev) => [newNotif, ...prev]);
-  }, []);
+  const pushNotification = useCallback(
+    (notif: Omit<Notification, "id" | "createdAt">) => {
+      const newNotif: Notification = {
+        ...notif,
+        id: `notif-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+      };
+      setNotifications((prev) => [newNotif, ...prev]);
+    },
+    [],
+  );
 
-  return { notifications, unreadCount, markAsRead, markAllAsRead, pushNotification };
+  return {
+    notifications,
+    notificationCount,
+    markAsRead,
+    markAllAsRead,
+    pushNotification,
+  };
 }
