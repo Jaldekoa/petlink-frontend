@@ -4,11 +4,13 @@ import Header from "@shared/components/main/Header";
 import NavBar from "@shared/components/main/NavBar";
 import NotificationPanel from "@features/notifications/NotificationPanel";
 import { useNotifications } from "@shared/hooks/useNotifications";
+import { getCurrentUserId } from "@/services/auth.service";
 
 export default function MainLayout() {
   const [panelOpen, setPanelOpen] = useState(false);
+  const userId = getCurrentUserId();
   const { notifications, notificationCount, markAsRead, markAllAsRead } =
-    useNotifications();
+    useNotifications(userId ?? undefined);
 
   return (
     <>

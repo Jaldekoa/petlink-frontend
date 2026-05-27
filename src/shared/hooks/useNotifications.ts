@@ -9,7 +9,7 @@ import type { AppNotification } from '../types/notification.types'
 
 export const useNotifications = (userId?: string) => {
   const [notifications, setNotifications] = useState<AppNotification[]>([])
-  const { socket, connect } = useSocket()
+  const { connect } = useSocket()
   const notificationCount = notifications.filter(n => !n.isRead).length
 
   useEffect(() => {
@@ -24,16 +24,16 @@ export const useNotifications = (userId?: string) => {
   useEffect(() => {
     if (!userId) return
 
-    connect(userId)
+    const activeSocket = connect(userId)
 
-    socket?.on('notification', (notification: AppNotification) => {
+    activeSocket?.on('notification', (notification: AppNotification) => {
       setNotifications(prev => [notification, ...prev])
     })
 
     return () => {
-      socket?.off('notification')
+      activeSocket?.off('notification')
     }
-  }, [connect, socket, userId])
+  }, [connect, userId])
 
   const markAsRead = async (id: string) => {
     const updated = await markAsReadRequest(id)

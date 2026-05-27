@@ -8,7 +8,6 @@ import MainLayout from "@shared/layout/Layout";
 
 import AnimalProfile from "@/features/animal-profile/animalProfile";
 import AuthGate from "@/features/auth/AuthGate";
-
 import { isAuthenticated } from "@services/auth.service";
 
 // === Dashboard ===
@@ -42,6 +41,12 @@ const router = createBrowserRouter([
     loader: mainLoader,
   },
   {
+    path: "/animals/:animalId",
+    element: <MainLayout />,
+    children: [{ index: true, element: <AnimalProfile /> }],
+    loader: mainLoader,
+  },
+  {
     path: "/search",
     element: <MainLayout />,
     children: [{ index: true, element: <Search /> }],
@@ -64,8 +69,7 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [{ index: true, element: <AuthGate /> }],
   },
-
-{
+  {
     path: "/dashboard",
     element: <DashboardLayout />,
     loader: mainLoader,

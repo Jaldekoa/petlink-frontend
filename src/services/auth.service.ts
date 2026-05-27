@@ -2,6 +2,7 @@ import type {
   AuthResponse,
   LoginDTO,
   RegisterDTO,
+  TokenPayload,
 } from "@/shared/types/auth.types";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
@@ -44,6 +45,28 @@ export const register = async (
 };
 
 export const getToken = () => localStorage.getItem("token");
+
+export const getTokenPayload = (): TokenPayload | null => {
+  const token = getToken();
+  if (!token) return null;
+
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return null;
+
+    const normalizedPayload = payload
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .padEnd(Math.ceil(payload.length / 4) * 4, "=");
+    const decodedPayload = atob(normalizedPayload);
+
+    return JSON.parse(decodedPayload) as TokenPayload;
+  } catch {
+    return null;
+  }
+};
+
+export const getCurrentUserId = () => getTokenPayload()?.userId ?? null;
 
 export const setToken = (token: string) => localStorage.setItem("token", token);
 

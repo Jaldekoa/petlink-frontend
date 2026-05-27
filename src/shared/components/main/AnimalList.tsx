@@ -1,12 +1,13 @@
 import AnimalCard from "@shared/components/main/AnimalCard";
+import { useNavigate } from "react-router";
 
 export interface AnimalGridItem {
   id: string;
-  animalName: string;
-  animalAge: string;
-  animalLocation: string;
-  animalEnergy: string;
-  animalImg: string;
+  name: string;
+  featureOne: string;
+  location: string;
+  featureTwo: string;
+  img: string;
   isFavorite?: boolean;
   badge?: string;
   badgeColor?: "orange" | "green" | "blue";
@@ -15,6 +16,7 @@ export interface AnimalGridItem {
 interface AnimalGridProps {
   animals: AnimalGridItem[];
   onFavoriteToggle?: (id: string) => void;
+  pendingFavoriteId?: string | null;
   emptyIcon?: string;
   emptyTitle?: string;
   emptySubtitle?: string;
@@ -23,10 +25,13 @@ interface AnimalGridProps {
 export default function AnimalGrid({
   animals,
   onFavoriteToggle,
+  pendingFavoriteId,
   emptyIcon = "pets",
   emptyTitle = "Aún no tienes animales aquí",
   emptySubtitle = "¡Explora y encuentra tu compañero perfecto!",
 }: AnimalGridProps) {
+  const navigate = useNavigate();
+
   // ── Empty state ──────────────────────────────────────────────────────────
   if (animals.length === 0) {
     return (
@@ -65,15 +70,17 @@ export default function AnimalGrid({
             className="w-full flex justify-center [&>article]:w-full"
           >
             <AnimalCard
-              img={animal.animalImg}
-              name={animal.animalName}
-              location={animal.animalLocation}
-              featureOne={animal.animalAge}
-              featureTwo={animal.animalEnergy}
+              img={animal.img}
+              name={animal.name}
+              location={animal.location}
+              featureOne={animal.featureOne}
+              featureTwo={animal.featureTwo}
               isFavorite={animal.isFavorite}
               badge={animal.badge}
               badgeColor={animal.badgeColor}
               onFavoriteToggle={() => onFavoriteToggle?.(animal.id)}
+              favoriteDisabled={pendingFavoriteId === animal.id}
+              onOpen={() => navigate(`/animals/${animal.id}`)}
             />
           </div>
         ))}

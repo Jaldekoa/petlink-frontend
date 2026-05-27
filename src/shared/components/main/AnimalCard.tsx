@@ -8,6 +8,8 @@ interface AnimalCardProps {
   badge?: string;
   badgeColor?: "orange" | "green" | "blue";
   onFavoriteToggle?: () => void;
+  favoriteDisabled?: boolean;
+  onOpen?: () => void;
 }
 
 export default function AnimalCard({
@@ -17,10 +19,32 @@ export default function AnimalCard({
   featureOne,
   featureTwo,
   isFavorite = false,
+  badge,
+  badgeColor = "blue",
   onFavoriteToggle,
+  favoriteDisabled = false,
+  onOpen,
 }: AnimalCardProps) {
+  const badgeColorClass = {
+    orange: "bg-warm-orange text-white",
+    green: "bg-green-600 text-white",
+    blue: "bg-primary text-on-primary",
+  }[badgeColor];
+
   return (
-    <article className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300">
+    <article
+      role={onOpen ? "button" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        if (!onOpen) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+      className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+    >
       <div
         className="
           h-full overflow-hidden rounded-3xl
@@ -39,30 +63,41 @@ export default function AnimalCard({
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
 
+          {badge && (
+            <span
+              className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${badgeColorClass}`}
+            >
+              {badge}
+            </span>
+          )}
+
           {/* Favorite button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
+              if (favoriteDisabled) return;
               onFavoriteToggle?.();
             }}
+            disabled={favoriteDisabled}
+            aria-disabled={favoriteDisabled}
             aria-label={
               isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"
             }
-            className="
+            className={`
               absolute bottom-4 right-4
               flex items-center justify-center w-11 h-11
               rounded-full backdrop-blur-md bg-black/30
               hover:bg-black/40 active:scale-90
               transition-all duration-200
-            "
+              ${favoriteDisabled ? "opacity-60 cursor-wait" : ""}
+            `}
           >
             <span
               className="material-symbols-outlined text-[22px]"
               style={{
                 color: isFavorite ? "var(--color-warm-orange)" : "white",
                 fontVariationSettings: isFavorite ? "'FILL' 1" : "'FILL' 0",
-              }}
-            >
+              }}>
               favorite
             </span>
           </button>
