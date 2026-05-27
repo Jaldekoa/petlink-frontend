@@ -51,7 +51,12 @@ const request = async <T>(
 
 export const apiClient = {
     get: async <T>(endpoint: string): Promise<T> => {
-        return request<T>(endpoint)
+        const res = await fetch(`${API_URL}${endpoint}`, {
+            headers: getAuthHeader()
+        })
+
+        if (!res.ok) throw new Error(await res.json().then(d => d.error))
+        return res.json()
     },
 
     post: async <T>(endpoint: string, body?: unknown): Promise<T> => {
@@ -76,6 +81,11 @@ export const apiClient = {
     },
 
     delete: async (endpoint: string): Promise<void> => {
-        await request<void>(endpoint, { method: 'DELETE' })
+        const res = await fetch(`${API_URL}${endpoint}`, {
+            method: 'DELETE',
+            headers: getAuthHeader()
+        })
+
+        if (!res.ok) throw new Error(await res.json().then(d => d.error))
     }
 }

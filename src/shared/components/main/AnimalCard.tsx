@@ -97,8 +97,7 @@ export default function AnimalCard({
               style={{
                 color: isFavorite ? "var(--color-warm-orange)" : "white",
                 fontVariationSettings: isFavorite ? "'FILL' 1" : "'FILL' 0",
-              }}
-            >
+              }}>
               favorite
             </span>
           </button>

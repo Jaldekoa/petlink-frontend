@@ -25,10 +25,7 @@ const TABS: TabConfig[] = [
   { key: "favoritos", label: "Favoritos", icon: "favorite" },
 ];
 
-const EMPTY_STATES: Record<
-  AnimalTab,
-  { icon: string; title: string; subtitle: string }
-> = {
+const EMPTY_STATES: Record< AnimalTab,{ icon: string; title: string; subtitle: string }> = {
   apadrinados: {
     icon: "volunteer_activism",
     title: "Aún no tienes animales apadrinados",
@@ -183,7 +180,7 @@ export default function MyAnimals() {
 
           {/* ── TAB NAVIGATION ───────────────────────────────────────────────── */}
           <nav className="max-w-6xl mx-auto mt-6">
-            <div className="flex justify-center gap-3 md:justify-start md:gap-4">
+            <div className="flex gap-3 md:justify-around md:gap-4">
               {TABS.map(({ key, label, icon: tabIcon }) => {
                 const isActive = activeTab === key;
                 const count = animals[key].length;
