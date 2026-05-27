@@ -1,4 +1,5 @@
 import AnimalCard from "@shared/components/main/AnimalCard";
+import { useNavigate } from "react-router";
 
 export interface AnimalGridItem {
   id: string;
@@ -27,6 +28,8 @@ export default function AnimalGrid({
   emptyTitle = "Aún no tienes animales aquí",
   emptySubtitle = "¡Explora y encuentra tu compañero perfecto!",
 }: AnimalGridProps) {
+  const navigate = useNavigate();
+
   // ── Empty state ──────────────────────────────────────────────────────────
   if (animals.length === 0) {
     return (
@@ -74,6 +77,7 @@ export default function AnimalGrid({
               badge={animal.badge}
               badgeColor={animal.badgeColor}
               onFavoriteToggle={() => onFavoriteToggle?.(animal.id)}
+              onOpen={() => navigate(`/animals/${animal.id}`)}
             />
           </div>
         ))}

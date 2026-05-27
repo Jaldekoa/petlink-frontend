@@ -8,6 +8,7 @@ interface AnimalCardProps {
   badge?: string;
   badgeColor?: "orange" | "green" | "blue";
   onFavoriteToggle?: () => void;
+  onOpen?: () => void;
 }
 
 export default function AnimalCard({
@@ -20,6 +21,7 @@ export default function AnimalCard({
   badge,
   badgeColor = "blue",
   onFavoriteToggle,
+  onOpen,
 }: AnimalCardProps) {
   const badgeColorClass = {
     orange: "bg-warm-orange text-white",
@@ -28,7 +30,19 @@ export default function AnimalCard({
   }[badgeColor];
 
   return (
-    <article className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300">
+    <article
+      role={onOpen ? "button" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        if (!onOpen) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+      className="group relative snap-start flex-shrink-0 cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+    >
       <div
         className="
           h-full overflow-hidden rounded-3xl
