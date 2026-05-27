@@ -10,12 +10,6 @@ interface AnimalCardProps {
   onFavoriteToggle?: () => void;
 }
 
-const BADGE_STYLES: Record<string, string> = {
-  orange: "bg-warm-orange/15 text-warm-orange border-warm-orange/30",
-  green: "bg-green-500/15 text-green-700 border-green-500/30",
-  blue: "bg-blue-500/15 text-blue-700 border-blue-500/30",
-};
-
 export default function AnimalCard({
   img,
   name,
@@ -23,8 +17,6 @@ export default function AnimalCard({
   featureOne,
   featureTwo,
   isFavorite = false,
-  badge,
-  badgeColor = "orange",
   onFavoriteToggle,
 }: AnimalCardProps) {
   return (
@@ -46,15 +38,6 @@ export default function AnimalCard({
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
-
-          {/* Badge (Apadrinado / Adoptado) */}
-          {badge && (
-            <div
-              className={`absolute top-3 left-3 px-2.5 py-1 rounded-full border text-[11px] font-semibold tracking-wide ${BADGE_STYLES[badgeColor]}`}
-            >
-              {badge}
-            </div>
-          )}
 
           {/* Favorite button */}
           <button
@@ -108,11 +91,6 @@ export default function AnimalCard({
             </span>
           </div>
         </div>
-
-        <button className="absolute bottom-6 right-6 bg-tertiary-container text-on-tertiary-container w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-          <span className="material-symbols-outlined">favorite</span>
-          {isFavorite}
-        </button>
       </div>
     </article>
   );
