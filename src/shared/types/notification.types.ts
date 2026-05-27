@@ -1,6 +1,6 @@
 import type { PaginationParams } from "./pagination.type"
 
-export interface Notification {
+export interface AppNotification {
     id: string
     title: string
     body: string | null
