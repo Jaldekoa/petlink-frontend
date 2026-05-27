@@ -1,4 +1,4 @@
-import AnimalCard from "@/shared/components/main/AnimalCard";
+import AnimalCard from "@shared/components/main/AnimalCard";
 
 export interface AnimalGridItem {
   id: string;
@@ -25,7 +25,6 @@ export default function AnimalGrid({
   emptyTitle = "Aún no tienes animales aquí",
   emptySubtitle = "¡Explora y encuentra tu compañero perfecto!",
 }: AnimalGridProps) {
-
   // ── Empty state ──────────────────────────────────────────────────────────
   if (animals.length === 0) {
     return (
@@ -51,7 +50,6 @@ export default function AnimalGrid({
   // ── Grid ─────────────────────────────────────────────────────────────────
   return (
     <section className="px-4 sm:px-6 lg:px-8 pb-28 max-w-7xl mx-auto">
-
       <div className="mb-6 flex items-center justify-start">
         <p className="uppercase text-label-sm font-label-sm tracking-widest text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">
           {animals.length} {animals.length === 1 ? "animal" : "animales"}
@@ -60,7 +58,10 @@ export default function AnimalGrid({
 
       <div className="grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {animals.map((animal) => (
-          <div key={animal.id} className="w-full flex justify-center [&>article]:w-full">
+          <div
+            key={animal.id}
+            className="w-full flex justify-center [&>article]:w-full"
+          >
             <AnimalCard
               img={animal.img}
               name={animal.name}
@@ -73,7 +74,6 @@ export default function AnimalGrid({
           </div>
         ))}
       </div>
-
     </section>
   );
 }

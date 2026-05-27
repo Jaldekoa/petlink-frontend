@@ -1,22 +1,18 @@
-import { useState } from "react";
-import { login, register } from "@services/auth.service";
+import { useEffect, useState, type FormEvent } from "react";
+import { useNavigate } from "react-router";
+import { authUser, login, register } from "@/services/auth.service";
 
 type AuthMode = "login" | "register";
 
-interface AuthGateProps {
-  onSuccess: () => void;
-}
-
-export default function AuthGate({ onSuccess }: AuthGateProps) {
+export default function AuthGate() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<AuthMode>("login");
 
-  // Login state
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Register state
   const [regUsername, setRegUsername] = useState("");
   const [regFullName, setRegFullName] = useState("");
   const [regEmail, setRegEmail] = useState("");
@@ -27,22 +23,24 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
   const [regLoading, setRegLoading] = useState(false);
   const [regSuccess, setRegSuccess] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (authUser()) navigate("/", { replace: true });
+  }, [navigate]);
+
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     setLoginError("");
     setLoginLoading(true);
-    
-    const data = {loginEmail:String,loginPassword:String}
-    const result = await login(data);
+    const result = await login(loginEmail, loginPassword);
     setLoginLoading(false);
     if (result.success) {
-      onSuccess();
+      navigate("/", { replace: true });
     } else {
       setLoginError(result.error ?? "Error al iniciar sesión");
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     setRegError("");
     if (regPassword !== regPasswordRepeat) {
@@ -66,6 +64,13 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
     }
   };
 
+  const switchMode = (m: AuthMode) => {
+    setMode(m);
+    setLoginError("");
+    setRegError("");
+    setRegSuccess(false);
+  };
+
   return (
     <div className="min-h-screen bg-surface flex flex-col">
 
@@ -73,7 +78,10 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
       <div className="bg-surface-container-lowest px-6 pt-10 pb-8 border-b border-outline-variant/10 shadow-xs">
         <div className="max-w-md mx-auto text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="material-symbols-outlined text-[36px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <span
+              className="material-symbols-outlined text-[36px] text-primary"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
               pets
             </span>
             <span className="text-primary font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg">
@@ -95,12 +103,8 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
             {(["login", "register"] as AuthMode[]).map((m) => (
               <button
                 key={m}
-                onClick={() => {
-                  setMode(m);
-                  setLoginError("");
-                  setRegError("");
-                  setRegSuccess(false);
-                }}
+                type="button"
+                onClick={() => switchMode(m)}
                 className={`
                   flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl
                   font-label-lg text-label-lg transition-all duration-200 cursor-pointer
@@ -164,7 +168,7 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
                 ¿Aún no tienes cuenta?{" "}
                 <button
                   type="button"
-                  onClick={() => setMode("register")}
+                  onClick={() => switchMode("register")}
                   className="text-primary font-medium hover:underline cursor-pointer"
                 >
                   Regístrate
@@ -255,7 +259,7 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
                 ¿Ya tienes cuenta?{" "}
                 <button
                   type="button"
-                  onClick={() => setMode("login")}
+                  onClick={() => switchMode("login")}
                   className="text-primary font-medium hover:underline cursor-pointer"
                 >
                   Inicia sesión
@@ -284,10 +288,8 @@ export default function AuthGate({ onSuccess }: AuthGateProps) {
                 </p>
               </div>
               <button
-                onClick={() => {
-                  setMode("login");
-                  setRegSuccess(false);
-                }}
+                type="button"
+                onClick={() => switchMode("login")}
                 className="
                   flex items-center gap-2 px-6 py-3 rounded-2xl
                   bg-primary text-on-primary font-label-lg text-label-lg
@@ -351,9 +353,7 @@ function Field({ label, icon, type, value, onChange, placeholder, required }: Fi
 function ErrorBanner({ message }: { message: string }) {
   return (
     <div className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-error/10 border border-error/20">
-      <span className="material-symbols-outlined text-[18px] text-error flex-shrink-0">
-        error
-      </span>
+      <span className="material-symbols-outlined text-[18px] text-error flex-shrink-0">error</span>
       <p className="text-error font-body-sm text-body-sm">{message}</p>
     </div>
   );
