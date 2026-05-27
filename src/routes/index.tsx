@@ -69,7 +69,6 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [{ index: true, element: <AuthGate /> }],
   },
-
   {
     path: "/dashboard",
     element: <DashboardLayout />,
